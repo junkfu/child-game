@@ -1,26 +1,91 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f8f5ff"><meta name="description" content="和獵魔女團一起找出10個不同！10個可愛場景、不限時、免費提示，適合小朋友的找碴遊戲。">
-<title>獵魔女團・閃亮找碴派對</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%238a59e8'/%3E%3Cpath d='m32 10 6 15 16 1-12 11 4 17-14-9-14 9 4-17L10 26l16-1z' fill='%23fff1a8'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="style.css">
-<script src="game.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8f6fc">
+<meta name="description" content="給幼兒園小朋友的網頁小遊戲合輯：找碴遊戲、注音符號學習。不限時、不扣分，免安裝。">
+<title>小玩具盒</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%238156d9'/%3E%3Ccircle cx='23' cy='26' r='8' fill='%23ffe08a'/%3E%3Ccircle cx='41' cy='26' r='8' fill='%23ed87ac'/%3E%3Crect x='15' y='38' width='34' height='9' rx='4.5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="shared/shell.css?v=1">
+<style>
+  .hero { text-align: center; padding: clamp(20px, 5vw, 44px) 0 clamp(18px, 4vw, 32px); }
+  .hero h1 { margin-bottom: 10px; }
+  .hero h1 em { font-style: normal; color: var(--brand); }
+  .hero p { color: var(--ink-soft); font-size: clamp(14px, 2.2vw, 17px); }
+
+  .games { display: grid; gap: clamp(14px, 2.5vw, 20px); grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+
+  .game-card {
+    display: flex; flex-direction: column; gap: 14px;
+    text-align: left; text-decoration: none; color: inherit;
+    background: var(--card); border: 2px solid var(--line);
+    border-radius: var(--radius-lg); padding: clamp(18px, 3vw, 26px);
+    box-shadow: 0 5px 0 var(--shadow);
+    transition: transform .15s, border-color .15s;
+  }
+  .game-card:hover { transform: translateY(-3px); border-color: var(--tint, var(--brand)); }
+  .game-card:active { transform: translateY(1px); box-shadow: 0 2px 0 var(--shadow); }
+
+  .game-head { display: flex; align-items: center; gap: 14px; }
+  .game-icon {
+    width: 66px; height: 66px; flex: none;
+    display: grid; place-items: center;
+    border-radius: 20px; font-size: 34px; font-weight: 700;
+    background: color-mix(in srgb, var(--tint) 15%, var(--card));
+    color: var(--tint);
+  }
+  .game-card h2 { font-size: clamp(18px, 2.6vw, 22px); }
+  .game-card .sub { color: var(--ink-soft); font-size: 14px; margin-top: 2px; }
+
+  .game-foot { display: flex; align-items: center; gap: 12px; margin-top: auto; }
+  .game-foot .meter { flex: 1; }
+  .game-foot .meter > i { background: var(--tint); }
+  .game-foot .count { font-size: 13px; font-weight: 700; color: var(--ink-faint); white-space: nowrap; }
+  .game-card .go { font-size: 15px; font-weight: 700; color: var(--tint); }
+
+  .soon {
+    display: grid; place-items: center; gap: 8px; text-align: center;
+    border: 2px dashed var(--line); border-radius: var(--radius-lg);
+    padding: clamp(18px, 3vw, 26px); min-height: 190px;
+    color: var(--ink-faint); font-size: 14px;
+  }
+  .soon span { font-size: 34px; opacity: .5; }
+
+  .note { margin-top: clamp(20px, 4vw, 34px); text-align: center; font-size: 13px; color: var(--ink-faint); line-height: 1.9; }
+</style>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="./" aria-label="閃亮找碴派對首頁"><span class="brand-mark">✦</span><span>獵魔女團<span class="brand-sub">小小觀察家俱樂部</span></span></a><div class="top-actions"><span class="relax-note">慢慢找，也很棒 ♡</span><button class="icon-btn" id="sound" aria-label="開啟音效" aria-pressed="false">♫</button><button class="icon-btn" id="help" aria-label="玩法說明">?</button></div></header>
-<main>
-<section class="intro"><div class="eyebrow"><span></span> HUNTR/X · LITTLE DETECTIVES</div><h1>閃亮找碴<span>派對</span><span class="title-spark" aria-hidden="true">✧</span></h1><p>睜大眼睛，和女孩們一起發現藏在畫裡的小秘密！</p><div class="intro-stamp" aria-hidden="true"><span>✦</span>小小眼睛<br>大大發現</div></section>
-<nav class="level-path" aria-label="選擇關卡"><div class="path-label"><span class="path-star">✦</span><div>你的閃亮旅程<small id="journey-count">已完成 0 / 10 關</small></div></div><div class="level-buttons" id="levels"></div></nav>
-<section class="game" aria-labelledby="level-title"><div class="game-toolbar"><div class="level-heading"><span class="level-icon" id="level-icon">🎤</span><div><div class="level-kicker" id="level-kicker">LEVEL 01 · 屋頂上的小派對</div><h2 id="level-title">閃亮出道舞台</h2></div></div><div class="game-actions"><button class="text-btn" id="restart"><span aria-hidden="true">↻</span> 再找一次</button><button class="hint-btn" id="hint"><span aria-hidden="true">💡</span> 給我小提示</button></div></div>
-<div class="instruction"><span class="instruction-pill">任務</span><span>找出 <strong>10 個不同</strong>，點左邊或右邊都可以喔！</span><span class="no-timer">♡ 不限時，慢慢來</span></div>
-<div class="boards"><section class="picture-card"><div class="picture-label"><span class="picture-dot original-dot"></span> 原來的樣子 <span>A</span></div><div class="scene" id="scene-a" role="group" aria-label="圖片 A，原來的樣子"><div class="scene-art"></div><div class="changes" aria-hidden="true"></div><div class="objects"></div><div class="marks"></div></div></section><div class="versus" aria-hidden="true">&</div><section class="picture-card"><div class="picture-label"><span class="picture-dot changed-dot"></span> 哪裡不一樣？ <span>B</span></div><div class="scene" id="scene-b" role="group" aria-label="圖片 B，找找不一樣"><div class="scene-art"></div><div class="changes" aria-hidden="true"></div><div class="objects"></div><div class="marks"></div></div></section></div>
-<div class="progress-area"><div class="progress-copy"><span class="progress-icon" aria-hidden="true">✦</span><div><strong>已找到 <b id="found-count">0</b><span> / 10</span></strong><p id="encouragement" role="status" aria-live="polite">看看衣服、髮飾和背景，小不同藏在畫裡喔！</p></div></div><div class="star-progress" id="stars" aria-label="已找到0個，共10個"></div><span class="finish-note">集滿星星就過關！</span></div>
-</section>
-<footer><span>✧ 每一個小發現，都值得拍拍手。</span><span>10 個場景 · 100 個藏在畫裡的小秘密</span></footer>
+
+<header class="topbar">
+  <a class="brand" href="index.html">
+    <span class="brand-mark" aria-hidden="true">🧸</span>
+    <span>小玩具盒<small>陪小朋友玩一下下</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-btn" id="sound" aria-pressed="true" aria-label="關閉聲音">♫</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>今天想玩<em>哪一個</em>？</h1>
+    <p>都不限時、不扣分，慢慢玩就好 ♡</p>
+  </div>
+  <div class="games" id="games"></div>
+  <p class="note">
+    進度會記在這台裝置的瀏覽器裡，換裝置或清除瀏覽資料就會重來。<br>
+    右上角 <strong>♫</strong> 可以關掉聲音，兩個遊戲共用這個設定。
+  </p>
 </main>
-<dialog id="help-dialog"><button class="dialog-close" data-close aria-label="關閉說明">×</button><div class="modal-art">🔎</div><p class="eyebrow">HELLO, LITTLE DETECTIVE</p><h2>一起來找碴！</h2><ol><li>看看兩張圖，留意衣服、髮飾、道具和背景的小變化。</li><li>點左邊或右邊，找到就會出現星星圈圈。</li><li>每關找齊 10 個不同，就能收集過關星星！</li></ol><p class="help-note">不倒數、不扣分。需要幫忙時，按「給我小提示」。<br>每一關都可以自由選，也可以隨時再玩一次。</p><button class="primary-btn" data-close>我知道了，開始找！</button></dialog>
-<dialog id="win-dialog"><div class="confetti" aria-hidden="true">✦ &nbsp; ✧ &nbsp; ✦</div><div class="modal-art">🏆</div><p class="eyebrow">YOU FOUND THEM ALL!</p><h2 id="win-title">太棒了！全都找到了！</h2><p id="win-copy">10 個小不同，都逃不過你的眼睛。</p><div class="win-stars" aria-hidden="true">★ ★ ★</div><button class="primary-btn" id="next">下一關，出發！ →</button><button class="text-btn" id="stay">再看看我的發現</button></dialog>
+
+<footer>✧ 每一個小發現，都值得拍拍手。</footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-</body></html>
+
+<script src="shared/storage.js?v=1" defer></script>
+<script src="shared/audio.js?v=1" defer></script>
+<script src="shared/core.js?v=1" defer></script>
+<script src="shared/catalog.js?v=1" defer></script>
+<script src="menu.js?v=1" defer></script>
+</body>
+</html>

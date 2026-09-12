@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>注音遊戲 · 玩法預覽（開發用）</title>
+<link rel="stylesheet" href="../../shared/shell.css">
+<link rel="stylesheet" href="zhuyin.css">
+<style>
+  body { padding: 20px; }
+  .bar { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+  .panes { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+  .pane { border: 2px solid var(--line); border-radius: 22px; background: var(--card); padding: 16px; }
+  .pane > h2 { font-size: 14px; color: var(--ink-faint); margin-bottom: 12px; }
+  .pane .stage { min-height: 380px; }
+  .note { font-size: 13px; color: var(--ink-faint); margin-bottom: 16px; line-height: 1.8; }
+</style>
+</head>
+<body>
+<div class="bar">
+  <strong>玩法預覽</strong>
+  <button class="btn" onclick="setTheme('girl')">女孩版</button>
+  <button class="btn" onclick="setTheme('boy')">男孩版</button>
+  <label>單元 <input id="unit" type="number" min="1" max="10" value="3" style="width:60px"></label>
+  <button class="btn btn-primary" onclick="build()">重新產生</button>
+</div>
+<p class="note">
+  開發用頁面，不是給小朋友玩的 —— 一次把四種玩法都畫出來，方便檢查版面與資料。<br>
+  正式入口是 <a href="index.html">index.html</a>。
+</p>
+<div class="panes" id="panes"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../../shared/storage.js" defer></script>
+<script src="../../shared/audio.js" defer></script>
+<script src="../../shared/core.js" defer></script>
+<script src="data/symbols.js" defer></script>
+<script src="data/strokes.js" defer></script>
+<script src="data/words.js" defer></script>
+<script src="data/syllables.js" defer></script>
+<script src="glyph.js" defer></script>
+<script src="quiz.js" defer></script>
+<script src="modes/meet.js" defer></script>
+<script src="modes/listen.js" defer></script>
+<script src="modes/picture.js" defer></script>
+<script src="modes/blend.js" defer></script>
+<script src="modes/trace.js" defer></script>
+<script defer>
+window.addEventListener('load', function () {
+  const Z = window.Kid.zhuyin;
+  window.setTheme = function (t) { document.documentElement.dataset.theme = t; build(); };
+  window.build = function () {
+    const unit = Number(document.getElementById('unit').value) || 3;
+    const deck = document.documentElement.dataset.theme === 'boy' ? 'boy' : 'girl';
+    const ctx = { unit: unit, symbols: Z.unitSymbols(unit), deck: deck };
+    const panes = document.getElementById('panes');
+    panes.innerHTML = '';
+    [
+      ['認識一下 meet', Z.modes.meet.build(ctx)[0]],
+      ['聽音找符號 listen', Z.modes.listen.build(ctx, 1)[0]],
+      ['看圖配注音 picture', Z.modes.picture.build(ctx, 1)[0]],
+      ['拼拼看 blend', Z.modes.blend.build(ctx, 1)[0]],
+      ['描寫筆順 trace', Z.modes.trace.build(ctx)[0]],
+    ].forEach(function (row) {
+      const pane = document.createElement('div');
+      pane.className = 'pane';
+      const h = document.createElement('h2');
+      h.textContent = row[0] + (row[1] ? '' : '（這個單元沒有題目）');
+      pane.appendChild(h);
+      const stage = document.createElement('div');
+      stage.className = 'stage';
+      stage.dataset.deck = deck;
+      pane.appendChild(stage);
+      panes.appendChild(pane);
+      try {
+        if (row[1]) Z.modes[row[1].mode].render(row[1], stage, function () {});
+      } catch (err) {
+        stage.innerHTML = '<p style="color:#c33;font:13px/1.6 monospace">' + err.message + '</p>';
+      }
+    });
+  };
+  document.documentElement.dataset.theme = 'girl';
+  build();
+});
+</script>
+</body>
+</html>

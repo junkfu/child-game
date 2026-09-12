@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8f6fc">
+<meta name="description" content="和獵魔女團一起找出10個不同！10個可愛場景、不限時、免費提示，適合小朋友的找碴遊戲。">
+<title>閃亮找碴派對</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%238a59e8'/%3E%3Cpath d='m32 10 6 15 16 1-12 11 4 17-14-9-14 9 4-17L10 26l16-1z' fill='%23fff1a8'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../shared/shell.css?v=1">
+<link rel="stylesheet" href="spot.css?v=1">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">←</span>
+    <span>閃亮找碴派對<small>小小觀察家俱樂部</small></span>
+  </a>
+  <div class="top-actions">
+    <span class="relax-note">慢慢找，也很棒 ♡</span>
+    <button class="icon-btn" id="sound" aria-pressed="true" aria-label="關閉聲音">♫</button>
+    <button class="icon-btn" id="help" aria-label="玩法說明">?</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <nav class="level-path" aria-label="選擇關卡">
+    <div class="path-label">
+      <span class="path-star" aria-hidden="true">✦</span>
+      <div>你的閃亮旅程<small id="journey-count">已完成 0 / 10 關</small></div>
+    </div>
+    <div class="level-buttons" id="levels"></div>
+  </nav>
+
+  <section class="game card" aria-labelledby="level-title">
+    <div class="game-toolbar">
+      <div class="level-heading">
+        <span class="level-icon" id="level-icon" aria-hidden="true">🎤</span>
+        <div>
+          <div class="level-kicker" id="level-kicker">LEVEL 01</div>
+          <h2 id="level-title">閃亮出道舞台</h2>
+        </div>
+      </div>
+      <div class="game-actions">
+        <button class="btn btn-ghost" id="restart"><span aria-hidden="true">↻</span> 再找一次</button>
+        <button class="btn" id="hint"><span aria-hidden="true">💡</span> 給我小提示</button>
+      </div>
+    </div>
+
+    <div class="instruction">
+      <span class="instruction-pill">任務</span>
+      <span>找出 <strong><b id="found-total">10</b> 個不同</strong>，點左邊或右邊都可以喔！</span>
+      <span class="no-timer">♡ 不限時，慢慢來</span>
+    </div>
+
+    <div class="boards">
+      <section class="picture-card">
+        <div class="picture-label"><span class="picture-dot original-dot"></span> 原來的樣子 <span>A</span></div>
+        <div class="scene" id="scene-a" role="group" aria-label="圖片 A，原來的樣子">
+          <div class="scene-art"></div><div class="changes" aria-hidden="true"></div>
+          <div class="objects"></div><div class="marks" aria-hidden="true"></div>
+        </div>
+      </section>
+      <div class="versus" aria-hidden="true">&amp;</div>
+      <section class="picture-card">
+        <div class="picture-label"><span class="picture-dot changed-dot"></span> 哪裡不一樣？ <span>B</span></div>
+        <div class="scene" id="scene-b" role="group" aria-label="圖片 B，找找不一樣">
+          <div class="scene-art"></div><div class="changes" aria-hidden="true"></div>
+          <div class="objects"></div><div class="marks" aria-hidden="true"></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="progress-area">
+      <div class="progress-copy">
+        <span class="progress-icon" aria-hidden="true">✦</span>
+        <div>
+          <strong>已找到 <b id="found-count">0</b><span> / <b id="found-total-2">10</b></span></strong>
+          <p id="encouragement" role="status" aria-live="polite">看看衣服、髮飾和背景，小不同藏在畫裡喔！</p>
+        </div>
+      </div>
+      <div class="stars" id="stars"></div>
+      <span class="finish-note">集滿星星就過關！</span>
+    </div>
+  </section>
+</main>
+
+<footer>✧ 每一個小發現，都值得拍拍手。</footer>
+
+<dialog id="help-dialog">
+  <button class="dialog-close" data-close aria-label="關閉說明">×</button>
+  <div class="dialog-art" aria-hidden="true">🔎</div>
+  <h2>一起來找碴！</h2>
+  <ol>
+    <li>看看兩張圖，留意衣服、髮飾、道具和背景的小變化。</li>
+    <li>點左邊或右邊，找到就會出現星星圈圈。</li>
+    <li>每關找齊全部的不同，就能收集過關星星！</li>
+  </ol>
+  <p>不倒數、不扣分。需要幫忙時，按「給我小提示」。<br>每一關都可以自由選，也可以隨時再玩一次。</p>
+  <button class="btn btn-primary" data-close>我知道了，開始找！</button>
+</dialog>
+
+<dialog id="win-dialog">
+  <div class="dialog-art" aria-hidden="true">🏆</div>
+  <h2 id="win-title">太棒了！全都找到了！</h2>
+  <p id="win-copy">10 個小不同，都逃不過你的眼睛。</p>
+  <div class="win-stars" aria-hidden="true">★ ★ ★</div>
+  <button class="btn btn-primary" id="next">下一關，出發！ →</button>
+  <button class="btn btn-ghost" id="stay">再看看我的發現</button>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../../shared/storage.js?v=1" defer></script>
+<script src="../../shared/audio.js?v=1" defer></script>
+<script src="../../shared/core.js?v=1" defer></script>
+<script src="spot.js?v=1" defer></script>
+</body>
+</html>

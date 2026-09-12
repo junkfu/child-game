@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fdf7f2">
+<meta name="description" content="給 4-5 歲小朋友的注音符號遊戲：聽音找符號、看圖配注音、描寫筆順、注音拼讀。分男孩版與女孩版。">
+<title>注音大冒險</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23e8833a'/%3E%3Ctext x='32' y='46' font-size='38' text-anchor='middle' fill='%23fff' font-family='sans-serif'%3E%E3%84%85%3C/text%3E%3C/svg%3E">
+<script>
+  /* 在第一次繪製前就決定主題，defer 的腳本會先閃一下錯的顏色 */
+  try {
+    var s = JSON.parse(localStorage.getItem('kid-games-v1') || '{}');
+    var p = s && s.games && s.games.zhuyin && s.games.zhuyin.profile;
+    if (p) document.documentElement.dataset.theme = p;
+  } catch (e) {}
+</script>
+<link rel="stylesheet" href="../../shared/shell.css?v=1">
+<link rel="stylesheet" href="zhuyin.css?v=1">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">←</span>
+    <span>注音大冒險<small>一起認識ㄅㄆㄇ</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="btn btn-ghost" id="switch-profile">換成男孩版</button>
+    <button class="icon-btn" id="sound" aria-pressed="true" aria-label="關閉聲音">♫</button>
+  </div>
+</header>
+
+<!-- 封面：選版本 -->
+<main class="wrap" data-screen="cover">
+  <div class="cover">
+    <h1>注音<em>大冒險</em></h1>
+    <p>聽一聽、找一找、描一描，<br>37 個注音符號一起認識！</p>
+    <div class="picker">
+      <button class="pick" data-profile="girl">
+        <span class="pick-face" aria-hidden="true">🌸</span>
+        <strong>女孩版</strong>
+        <span>蝴蝶、草莓、娃娃</span>
+      </button>
+      <button class="pick" data-profile="boy">
+        <span class="pick-face" aria-hidden="true">🦕</span>
+        <strong>男孩版</strong>
+        <span>恐龍、火箭、汽車</span>
+      </button>
+    </div>
+    <p class="cover-note">兩個版本的配色和題目圖片不一樣，隨時可以換。</p>
+  </div>
+</main>
+
+<!-- 單元地圖 -->
+<main class="wrap" data-screen="map" hidden>
+  <div class="map-head">
+    <h1>要挑戰哪一關？</h1>
+    <p id="map-progress">已完成 0 / 10 關</p>
+  </div>
+  <div class="unit-map" id="unit-map"></div>
+</main>
+
+<!-- 遊戲進行中 -->
+<main class="wrap play-wrap" data-screen="play" hidden>
+  <div class="play-head">
+    <button class="btn btn-ghost" id="quit"><span aria-hidden="true">←</span> 回地圖</button>
+    <div class="play-meta">
+      <strong id="unit-title">第 1 關</strong>
+      <span id="step-count">1 / 1</span>
+    </div>
+  </div>
+  <div class="meter play-meter"><i id="step-fill"></i></div>
+  <div id="stage" class="stage"></div>
+</main>
+
+<!-- 單元結算 -->
+<main class="wrap" data-screen="done" hidden>
+  <div class="done card">
+    <div class="dialog-art" aria-hidden="true">🎉</div>
+    <h1 id="done-title">完成！</h1>
+    <div class="stars done-stars" id="done-stars"></div>
+    <p id="done-copy"></p>
+    <button class="btn btn-primary" id="done-next">下一關，出發！ →</button>
+    <button class="btn btn-ghost" id="to-map">回關卡地圖</button>
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../../shared/storage.js?v=1" defer></script>
+<script src="../../shared/audio.js?v=1" defer></script>
+<script src="../../shared/core.js?v=1" defer></script>
+<script src="data/symbols.js?v=1" defer></script>
+<script src="data/strokes.js?v=1" defer></script>
+<script src="data/words.js?v=1" defer></script>
+<script src="data/syllables.js?v=1" defer></script>
+<script src="glyph.js?v=1" defer></script>
+<script src="quiz.js?v=1" defer></script>
+<script src="modes/meet.js?v=1" defer></script>
+<script src="modes/listen.js?v=1" defer></script>
+<script src="modes/picture.js?v=1" defer></script>
+<script src="modes/blend.js?v=1" defer></script>
+<script src="modes/trace.js?v=1" defer></script>
+<script src="zhuyin.js?v=1" defer></script>
+</body>
+</html>

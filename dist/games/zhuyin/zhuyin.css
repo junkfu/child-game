@@ -1,0 +1,193 @@
+/* 注音大冒險。共用的色票、按鈕、對話框、toast、星星在 shared/shell.css。
+
+   男孩版 / 女孩版：底層是「profile」而不只是「theme」，因為除了配色，
+   題目圖片也不一樣（見 data/words.js 的兩副牌）。這裡只管視覺，
+   內容的切換在 JS 裡用查表處理，遊戲邏輯不需要知道是哪一版。
+   data-theme 由 <head> 的同步 inline script 在第一次繪製前就設好。 */
+
+[data-theme="girl"] {
+  --brand: #c4569b; --brand-soft: #e07fb8; --accent: #f2a0c4;
+  --paper: #fdf6fa; --line: #f2dde9; --shadow: #eed3e2; --star: #e8a33d;
+}
+[data-theme="boy"] {
+  --brand: #2f7fc4; --brand-soft: #57a8dd; --accent: #46bfa4;
+  --paper: #f2f8fd; --line: #d8e7f2; --shadow: #cfe0ee; --star: #e8a33d;
+}
+
+/* ── 符號本身 ───────────────────────────────────────── */
+/* 用 data/strokes.js 的輪廓畫，不是字型文字 —— 見 glyph.js 的說明 */
+.glyph { width: 1em; height: 1em; display: block; }
+
+/* ── 封面 ───────────────────────────────────────────── */
+.cover { text-align: center; padding: clamp(18px, 5vh, 48px) 0; }
+.cover h1 { font-size: clamp(30px, 7vw, 50px); margin-bottom: 10px; }
+.cover h1 em { font-style: normal; color: var(--brand); }
+.cover > p { color: var(--ink-soft); font-size: clamp(15px, 2.4vw, 18px); margin-bottom: clamp(22px, 4vh, 38px); }
+.cover-note { margin-top: 22px; font-size: 13px; color: var(--ink-faint); }
+
+.picker { display: flex; gap: clamp(14px, 3vw, 24px); justify-content: center; flex-wrap: wrap; }
+.pick {
+  flex: 1 1 220px; max-width: 300px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: clamp(20px, 4vw, 32px) 18px;
+  background: var(--card); border: 3px solid var(--line);
+  border-radius: var(--radius-lg); cursor: pointer;
+  box-shadow: 0 6px 0 var(--shadow);
+  transition: transform .15s, border-color .15s;
+}
+.pick:hover { transform: translateY(-3px); border-color: var(--brand-soft); }
+.pick:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--shadow); }
+.pick-face { font-size: clamp(48px, 10vw, 72px); line-height: 1; }
+.pick strong { font-size: 21px; }
+.pick span:last-child { font-size: 13px; color: var(--ink-faint); }
+
+/* ── 單元地圖 ───────────────────────────────────────── */
+.map-head { text-align: center; margin-bottom: clamp(16px, 3vw, 26px); }
+.map-head p { color: var(--ink-faint); font-size: 14px; margin-top: 4px; }
+
+.unit-map {
+  display: grid; gap: clamp(12px, 2vw, 18px);
+  grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+}
+.unit {
+  position: relative; text-align: left; cursor: pointer;
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 18px; min-height: 150px;
+  background: var(--card); border: 2px solid var(--line);
+  border-radius: var(--radius-lg); box-shadow: 0 5px 0 var(--shadow);
+  transition: transform .15s, border-color .15s;
+}
+.unit:hover { transform: translateY(-3px); border-color: var(--brand-soft); }
+.unit:active { transform: translateY(1px); box-shadow: 0 2px 0 var(--shadow); }
+.unit.done { border-color: color-mix(in srgb, var(--brand) 45%, var(--line)); }
+.unit-n {
+  position: absolute; top: 14px; right: 16px;
+  font-size: 13px; font-weight: 700; color: var(--ink-faint);
+}
+.unit-glyphs {
+  display: flex; gap: 6px; color: var(--brand);
+  font-size: 38px; padding-right: 22px;   /* 別頂到右上角的關卡編號 */
+  flex-wrap: wrap;
+}
+.unit-glyphs .glyph { width: .82em; height: .82em; }
+.unit-sub { font-size: 13px; color: var(--ink-soft); }
+.unit-stars { margin-top: auto; }
+.unit-stars .star { font-size: 17px; }
+
+/* ── 進行中 ─────────────────────────────────────────── */
+.play-wrap { display: flex; flex-direction: column; min-height: calc(100dvh - 72px); }
+.play-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.play-meta { text-align: right; }
+.play-meta strong { display: block; font-size: 15px; }
+.play-meta span { font-size: 13px; color: var(--ink-faint); }
+.play-meter { margin-bottom: clamp(14px, 3vh, 26px); }
+.stage { flex: 1; display: flex; align-items: center; justify-content: center; }
+
+.q { width: 100%; display: flex; flex-direction: column; align-items: center; gap: clamp(16px, 3.5vh, 32px); }
+.q-prompt { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.q-hint { font-size: clamp(15px, 2.4vw, 18px); color: var(--ink-soft); font-weight: 600; text-align: center; }
+
+/* 喇叭按鈕：這是聽力題唯一的線索，做得夠大、可以無限次重聽 */
+.speaker {
+  width: clamp(96px, 20vw, 132px); height: clamp(96px, 20vw, 132px);
+  border-radius: 50%; cursor: pointer;
+  font-size: clamp(40px, 8vw, 56px);
+  display: grid; place-items: center;
+  background: var(--brand); color: #fff; border: none;
+  box-shadow: 0 6px 0 color-mix(in srgb, var(--brand) 62%, #000);
+  transition: transform .12s;
+}
+.speaker:hover { filter: brightness(1.07); transform: translateY(-2px); }
+.speaker:active { transform: translateY(3px); box-shadow: 0 2px 0 color-mix(in srgb, var(--brand) 62%, #000); }
+
+/* 選項：4-5 歲的觸控目標要大，這裡遠超過 shell.css 的 --tap-lg */
+.q-options {
+  display: grid; gap: clamp(10px, 2vw, 18px);
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  width: 100%; max-width: 620px;
+}
+.opt {
+  aspect-ratio: 1; min-height: var(--tap-lg);
+  display: grid; place-items: center; cursor: pointer;
+  font-size: clamp(52px, 11vw, 78px); color: var(--brand);
+  background: var(--card); border: 3px solid var(--line);
+  border-radius: var(--radius); box-shadow: 0 5px 0 var(--shadow);
+  transition: transform .12s, border-color .12s;
+}
+.opt:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--brand-soft); }
+.opt:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 var(--shadow); }
+.opt.right { border-color: var(--good); background: var(--good-soft); color: var(--good); }
+.opt.nope { opacity: .32; }
+.opt:disabled { cursor: default; }
+
+/* ── 題目圖：有圖用圖，沒有就大 Emoji ───────────────── */
+.pic {
+  width: clamp(140px, 30vw, 210px); height: clamp(140px, 30vw, 210px);
+  display: grid; place-items: center; position: relative;
+  background: var(--card); border: 3px solid var(--line);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.pic-emoji { font-size: clamp(72px, 16vw, 112px); line-height: 1; }
+.pic-img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.pic.has-img .pic-emoji { display: none; }
+.q-pic { cursor: pointer; }
+.q-pic:hover { border-color: var(--brand-soft); }
+
+/* ── 認識一下 ───────────────────────────────────────── */
+.meet { display: flex; flex-direction: column; align-items: center; gap: clamp(12px, 2.5vh, 22px); }
+.meet-glyph { font-size: clamp(120px, 26vw, 190px); color: var(--brand); line-height: 1; }
+.meet-word {
+  display: flex; align-items: center; gap: 14px; cursor: pointer;
+  padding: 10px 18px 10px 10px; background: var(--card);
+  border: 2px solid var(--line); border-radius: var(--radius);
+}
+.meet-word .pic { width: 82px; height: 82px; border-width: 2px; border-radius: 16px; }
+.meet-word .pic-emoji { font-size: 46px; }
+.meet-word-text strong { display: block; font-size: 21px; }
+.meet-word-zhuyin { font-size: 14px; color: var(--ink-faint); }
+
+/* ── 拼拼看 ─────────────────────────────────────────── */
+.blend-eq { display: flex; align-items: center; gap: clamp(8px, 2vw, 18px); flex-wrap: wrap; justify-content: center; }
+.blend-part { font-size: clamp(56px, 13vw, 94px); color: var(--brand); line-height: 1; display: grid; place-items: center; }
+.blend-slot {
+  width: 1em; height: 1em; border: 4px dashed var(--line);
+  border-radius: 18px; color: var(--ink-faint); font-size: clamp(44px, 10vw, 72px);
+}
+.blend-plus, .blend-eq-sign { font-size: clamp(26px, 5vw, 40px); color: var(--ink-faint); }
+.blend-result { font-size: clamp(40px, 9vw, 64px); font-weight: 700; color: var(--good); }
+
+/* ── 描寫筆順 ───────────────────────────────────────── */
+.trace-stage {
+  width: min(74vw, 46vh, 400px); aspect-ratio: 1;
+  background: var(--card); border: 3px solid var(--line);
+  border-radius: var(--radius-lg); position: relative;
+}
+/* 描寫時手指拖曳不可以捲動頁面 */
+.trace-svg { width: 100%; height: 100%; display: block; touch-action: none; }
+.trace-base { fill: color-mix(in srgb, var(--line) 70%, var(--card)); }
+.trace-ink {
+  fill: none; stroke: var(--brand); stroke-width: 220;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.trace-guide {
+  fill: none; stroke: var(--brand-soft); stroke-width: 8;
+  stroke-dasharray: 26 30; stroke-linecap: round; opacity: .85;
+}
+.trace-start { fill: #fff; stroke: var(--accent); stroke-width: 18; }
+.trace-start.nudge { animation: pulse 1s infinite; transform-box: fill-box; transform-origin: center; }
+.trace-startnum { font-size: 74px; font-weight: 700; fill: var(--accent); }
+.trace-done .trace-ink { stroke: var(--good); transition: stroke .3s; }
+.trace-bar { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+
+/* ── 結算 ───────────────────────────────────────────── */
+.done { max-width: 440px; margin-inline: auto; text-align: center; }
+.done h1 { font-size: 26px; margin-bottom: 12px; }
+.done p { color: var(--ink-soft); margin: 14px 0 20px; }
+.done-stars { justify-content: center; }
+.done-stars .star { font-size: 38px; }
+.done .btn { width: 100%; margin-top: 8px; }
+
+@media (max-width: 620px) {
+  .play-head .btn { padding: 12px 16px; }
+  .q-options { max-width: 100%; }
+}

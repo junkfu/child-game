@@ -1,0 +1,27 @@
+dist/games/zhuyin/data/strokes.js 裡的字形輪廓與筆畫中線資料
+取自 animCJK 專案：
+
+    AnimCJK 2016-2026 Copyright FM-SH
+    https://github.com/parsimonhi/animCJK
+
+原始檔案為 svgsZhHansZoo/12549.svg 至 12585.svg，
+對應 Unicode U+3105–U+3129（注音符號 ㄅ–ㄩ）共 37 個檔案。
+
+授權（引自 animCJK README）：
+
+    SVG files representing Kana, Bopomofo and strokes may be redistributed
+    and/or modified under the GNU Lesser General Public License, since these
+    SVG are not derived from Arphic fonts.
+
+亦即本專案使用的注音符號資料適用 GNU Lesser General Public License
+第三版或（由你選擇）任何較新的版本。animCJK 中衍生自 Arphic 字型的
+漢字／假名字形另受 Arphic Public License 規範，本專案並未使用那些檔案。
+
+本專案所做的修改：
+  - 只抽出 <path id="..."> 的輪廓 d 屬性與各筆畫中線的 d 屬性。
+  - 捨棄動畫用的 CSS、clipPath 與 pathLength 屬性。
+  - 依原始 SVG 的 --d 延遲值排序，轉成 JavaScript 的有序陣列。
+  - 中線的 M/L 指令轉成 [[x, y], ...] 座標陣列。
+座標系維持原始的 1024x1024，未做任何縮放或翻轉。
+
+LGPL-3.0 全文：https://www.gnu.org/licenses/lgpl-3.0.txt

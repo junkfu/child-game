@@ -1,0 +1,39 @@
+/* 遊戲清單。要加第 N 個遊戲，就在這裡加一筆，主選單會自動長出卡片。
+
+   progress(state) 回傳 { done, total }，state 是 Kid.store.game(id) 的內容。
+   各遊戲的進度形狀不一樣，所以換算方式寫在各自這一筆裡，主選單不需要知道細節。
+
+   href 一律寫到 index.html，不要只寫目錄 ——
+   file:// 下沒有伺服器幫忙解析目錄索引。 */
+(function (Kid) {
+  'use strict';
+
+  Kid.catalog = [
+    {
+      id: 'spot',
+      title: '閃亮找碴派對',
+      sub: '兩張圖比一比，找出藏起來的小秘密',
+      icon: '🔎',
+      href: 'games/spot/index.html',
+      tint: '#8156d9',
+      progress: function (s) {
+        const found = Array.isArray(s.found) ? s.found : [];
+        const done = found.filter(function (f) { return Array.isArray(f) && f.length >= 10; }).length;
+        return { done: done, total: 10, unit: '關' };
+      },
+    },
+    {
+      id: 'zhuyin',
+      title: '注音大冒險',
+      sub: '聽一聽、找一找、描一描，認識ㄅㄆㄇ',
+      icon: 'ㄅ',
+      href: 'games/zhuyin/index.html',
+      tint: '#e8833a',
+      progress: function (s) {
+        const units = (s && s.units) || {};
+        const done = Object.keys(units).filter(function (k) { return units[k] && units[k].stars > 0; }).length;
+        return { done: done, total: 10, unit: '關' };
+      },
+    },
+  ];
+})(window.Kid = window.Kid || {});

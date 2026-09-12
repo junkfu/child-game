@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>注音音檔驗收</title>
+<style>
+:root{font-family:'Noto Sans TC','PingFang TC',sans-serif;color:#353045;background:#f8f6fc}
+*{box-sizing:border-box}body{margin:0;padding:24px;max-width:1100px;margin-inline:auto}
+h1{font-size:24px;margin:0 0 4px}
+p.lead{color:#887795;margin:0 0 20px;font-size:14px;line-height:1.7}
+h2{font-size:16px;margin:28px 0 12px;padding-bottom:6px;border-bottom:2px solid #ebe4f5}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
+button{font:inherit;cursor:pointer;background:#fff;border:2px solid #ebe4f5;border-radius:14px;
+  padding:12px 8px;text-align:center;transition:.15s;box-shadow:0 3px 0 #ebe4f5}
+button:hover{border-color:#b077d3;transform:translateY(-2px);box-shadow:0 5px 0 #ebe4f5}
+button:active{transform:translateY(1px);box-shadow:0 1px 0 #ebe4f5}
+button.played{background:#f3fbf4;border-color:#7cbd85;box-shadow:0 3px 0 #cfe8d3}
+button.flag{background:#fff8e6;border-color:#e4b95b;box-shadow:0 3px 0 #f0dfae}
+.big{font-size:30px;line-height:1.25;display:block}
+.note{font-size:11px;color:#9c8ca9;display:block;margin-top:4px;word-break:break-all}
+.bar{position:sticky;top:0;background:#f8f6fcf2;backdrop-filter:blur(6px);padding:10px 0;
+  margin:-24px -24px 0;padding-inline:24px;border-bottom:1px solid #ebe4f5;z-index:2;
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bar button{box-shadow:none;padding:8px 14px;font-size:13px}
+kbd{background:#efe9f7;border-radius:4px;padding:1px 5px;font-size:11px}
+</style></head><body>
+<div class="bar">
+  <button onclick="playAll()">▶ 依序播放本頁全部</button>
+  <button onclick="stopAll()">■ 停止</button>
+  <span style="font-size:13px;color:#887795">點過的會變綠色；覺得唸錯的按 <kbd>shift</kbd>+點 標黃</span>
+</div>
+<h1>注音音檔驗收</h1>
+<p class="lead">
+這是 <code>tools/make-audio.sh</code> 產生的 130 個音檔。請逐一聽過，
+<strong>特別注意 ㄈ ㄝ ㄟ ㄥ ㄜ ㄦ ㄤ ㄠ</strong>（這幾個在國語裡找不到同音的一聲字，
+是最可能出問題的）。拼讀音節請確認聽起來是「ㄅㄚ」這樣一個完整的音，
+而不是「ㄅㄛ－ㄚ」兩段。<br>
+覺得哪個唸得不對，shift+點標成黃色，之後可以換字重產或自己錄音覆蓋同名檔。
+</p>
+<h2>注音符號呼讀音（37）— 直接餵注音字元產生</h2>
+<div class="grid">
+  <button data-f="sym/b.m4a"><span class="big">ㄅ</span><span class="note">b · initial · 單元1</span></button>
+  <button data-f="sym/p.m4a"><span class="big">ㄆ</span><span class="note">p · initial · 單元1</span></button>
+  <button data-f="sym/m.m4a"><span class="big">ㄇ</span><span class="note">m · initial · 單元1</span></button>
+  <button data-f="sym/f.m4a"><span class="big">ㄈ</span><span class="note">f · initial · 單元1</span></button>
+  <button data-f="sym/a.m4a"><span class="big">ㄚ</span><span class="note">a · final · 單元2</span></button>
+  <button data-f="sym/o.m4a"><span class="big">ㄛ</span><span class="note">o · final · 單元2</span></button>
+  <button data-f="sym/e.m4a"><span class="big">ㄜ</span><span class="note">e · final · 單元2</span></button>
+  <button data-f="sym/eh.m4a"><span class="big">ㄝ</span><span class="note">eh · final · 單元2</span></button>
+  <button data-f="sym/d.m4a"><span class="big">ㄉ</span><span class="note">d · initial · 單元3</span></button>
+  <button data-f="sym/t.m4a"><span class="big">ㄊ</span><span class="note">t · initial · 單元3</span></button>
+  <button data-f="sym/n.m4a"><span class="big">ㄋ</span><span class="note">n · initial · 單元3</span></button>
+  <button data-f="sym/l.m4a"><span class="big">ㄌ</span><span class="note">l · initial · 單元3</span></button>
+  <button data-f="sym/g.m4a"><span class="big">ㄍ</span><span class="note">g · initial · 單元4</span></button>
+  <button data-f="sym/k.m4a"><span class="big">ㄎ</span><span class="note">k · initial · 單元4</span></button>
+  <button data-f="sym/h.m4a"><span class="big">ㄏ</span><span class="note">h · initial · 單元4</span></button>
+  <button data-f="sym/ai.m4a"><span class="big">ㄞ</span><span class="note">ai · final · 單元5</span></button>
+  <button data-f="sym/ei.m4a"><span class="big">ㄟ</span><span class="note">ei · final · 單元5</span></button>
+  <button data-f="sym/ao.m4a"><span class="big">ㄠ</span><span class="note">ao · final · 單元5</span></button>
+  <button data-f="sym/ou.m4a"><span class="big">ㄡ</span><span class="note">ou · final · 單元5</span></button>
+  <button data-f="sym/j.m4a"><span class="big">ㄐ</span><span class="note">j · initial · 單元6</span></button>
+  <button data-f="sym/q.m4a"><span class="big">ㄑ</span><span class="note">q · initial · 單元6</span></button>
+  <button data-f="sym/x.m4a"><span class="big">ㄒ</span><span class="note">x · initial · 單元6</span></button>
+  <button data-f="sym/zh.m4a"><span class="big">ㄓ</span><span class="note">zh · initial · 單元7</span></button>
+  <button data-f="sym/ch.m4a"><span class="big">ㄔ</span><span class="note">ch · initial · 單元7</span></button>
+  <button data-f="sym/sh.m4a"><span class="big">ㄕ</span><span class="note">sh · initial · 單元7</span></button>
+  <button data-f="sym/r.m4a"><span class="big">ㄖ</span><span class="note">r · initial · 單元7</span></button>
+  <button data-f="sym/z.m4a"><span class="big">ㄗ</span><span class="note">z · initial · 單元8</span></button>
+  <button data-f="sym/c.m4a"><span class="big">ㄘ</span><span class="note">c · initial · 單元8</span></button>
+  <button data-f="sym/s.m4a"><span class="big">ㄙ</span><span class="note">s · initial · 單元8</span></button>
+  <button data-f="sym/an.m4a"><span class="big">ㄢ</span><span class="note">an · final · 單元9</span></button>
+  <button data-f="sym/en.m4a"><span class="big">ㄣ</span><span class="note">en · final · 單元9</span></button>
+  <button data-f="sym/ang.m4a"><span class="big">ㄤ</span><span class="note">ang · final · 單元9</span></button>
+  <button data-f="sym/eng.m4a"><span class="big">ㄥ</span><span class="note">eng · final · 單元9</span></button>
+  <button data-f="sym/er.m4a"><span class="big">ㄦ</span><span class="note">er · final · 單元9</span></button>
+  <button data-f="sym/i.m4a"><span class="big">ㄧ</span><span class="note">i · medial · 單元10</span></button>
+  <button data-f="sym/u.m4a"><span class="big">ㄨ</span><span class="note">u · medial · 單元10</span></button>
+  <button data-f="sym/v.m4a"><span class="big">ㄩ</span><span class="note">v · medial · 單元10</span></button>
+</div>
+<h2>拼讀音節（27）— 用代表字產生，確保是單音節</h2>
+<div class="grid">
+  <button data-f="syl/ba.m4a"><span class="big">ㄅㄚ</span><span class="note">八 · 由「八」產生</span></button>
+  <button data-f="syl/bao.m4a"><span class="big">ㄅㄠ</span><span class="note">包 · 由「包」產生</span></button>
+  <button data-f="syl/bei.m4a"><span class="big">ㄅㄟ</span><span class="note">杯 · 由「杯」產生</span></button>
+  <button data-f="syl/pa.m4a"><span class="big">ㄆㄚ</span><span class="note">趴 · 由「趴」產生</span></button>
+  <button data-f="syl/ma.m4a"><span class="big">ㄇㄚ</span><span class="note">媽 · 由「媽」產生</span></button>
+  <button data-f="syl/mao.m4a"><span class="big">ㄇㄠ</span><span class="note">貓 · 由「貓」產生</span></button>
+  <button data-f="syl/fa.m4a"><span class="big">ㄈㄚ</span><span class="note">發 · 由「發」產生</span></button>
+  <button data-f="syl/feng.m4a"><span class="big">ㄈㄥ</span><span class="note">風 · 由「風」產生</span></button>
+  <button data-f="syl/da.m4a"><span class="big">ㄉㄚ</span><span class="note">搭 · 由「搭」產生</span></button>
+  <button data-f="syl/dao.m4a"><span class="big">ㄉㄠ</span><span class="note">刀 · 由「刀」產生</span></button>
+  <button data-f="syl/deng.m4a"><span class="big">ㄉㄥ</span><span class="note">燈 · 由「燈」產生</span></button>
+  <button data-f="syl/tang.m4a"><span class="big">ㄊㄤ</span><span class="note">湯 · 由「湯」產生</span></button>
+  <button data-f="syl/la.m4a"><span class="big">ㄌㄚ</span><span class="note">拉 · 由「拉」產生</span></button>
+  <button data-f="syl/gao.m4a"><span class="big">ㄍㄠ</span><span class="note">高 · 由「高」產生</span></button>
+  <button data-f="syl/gang.m4a"><span class="big">ㄍㄤ</span><span class="note">鋼 · 由「鋼」產生</span></button>
+  <button data-f="syl/ka.m4a"><span class="big">ㄎㄚ</span><span class="note">咖 · 由「咖」產生</span></button>
+  <button data-f="syl/kai.m4a"><span class="big">ㄎㄞ</span><span class="note">開 · 由「開」產生</span></button>
+  <button data-f="syl/he.m4a"><span class="big">ㄏㄜ</span><span class="note">喝 · 由「喝」產生</span></button>
+  <button data-f="syl/ji.m4a"><span class="big">ㄐㄧ</span><span class="note">雞 · 由「雞」產生</span></button>
+  <button data-f="syl/qi.m4a"><span class="big">ㄑㄧ</span><span class="note">七 · 由「七」產生</span></button>
+  <button data-f="syl/xi.m4a"><span class="big">ㄒㄧ</span><span class="note">西 · 由「西」產生</span></button>
+  <button data-f="syl/zhu.m4a"><span class="big">ㄓㄨ</span><span class="note">豬 · 由「豬」產生</span></button>
+  <button data-f="syl/che.m4a"><span class="big">ㄔㄜ</span><span class="note">車 · 由「車」產生</span></button>
+  <button data-f="syl/shu.m4a"><span class="big">ㄕㄨ</span><span class="note">書 · 由「書」產生</span></button>
+  <button data-f="syl/shan.m4a"><span class="big">ㄕㄢ</span><span class="note">山 · 由「山」產生</span></button>
+  <button data-f="syl/zu.m4a"><span class="big">ㄗㄨ</span><span class="note">租 · 由「租」產生</span></button>
+  <button data-f="syl/san.m4a"><span class="big">ㄙㄢ</span><span class="note">三 · 由「三」產生</span></button>
+</div>
+<h2>語詞・女孩版（28）</h2>
+<div class="grid">
+  <button data-f="word/girl/b.m4a"><span class="big">🥟</span><span class="note">包子 · ㄅ</span></button>
+  <button data-f="word/girl/p.m4a"><span class="big">🍎</span><span class="note">蘋果 · ㄆ</span></button>
+  <button data-f="word/girl/m.m4a"><span class="big">🐱</span><span class="note">貓咪 · ㄇ</span></button>
+  <button data-f="word/girl/f.m4a"><span class="big">🏠</span><span class="note">房子 · ㄈ</span></button>
+  <button data-f="word/girl/d.m4a"><span class="big">🎂</span><span class="note">蛋糕 · ㄉ</span></button>
+  <button data-f="word/girl/t.m4a"><span class="big">🐰</span><span class="note">兔子 · ㄊ</span></button>
+  <button data-f="word/girl/n.m4a"><span class="big">🥛</span><span class="note">牛奶 · ㄋ</span></button>
+  <button data-f="word/girl/l.m4a"><span class="big">🥕</span><span class="note">蘿蔔 · ㄌ</span></button>
+  <button data-f="word/girl/g.m4a"><span class="big">🧃</span><span class="note">果汁 · ㄍ</span></button>
+  <button data-f="word/girl/k.m4a"><span class="big">💌</span><span class="note">卡片 · ㄎ</span></button>
+  <button data-f="word/girl/h.m4a"><span class="big">🦋</span><span class="note">蝴蝶 · ㄏ</span></button>
+  <button data-f="word/girl/j.m4a"><span class="big">🥚</span><span class="note">雞蛋 · ㄐ</span></button>
+  <button data-f="word/girl/q.m4a"><span class="big">👗</span><span class="note">裙子 · ㄑ</span></button>
+  <button data-f="word/girl/x.m4a"><span class="big">🍉</span><span class="note">西瓜 · ㄒ</span></button>
+  <button data-f="word/girl/zh.m4a"><span class="big">🕷️</span><span class="note">蜘蛛 · ㄓ</span></button>
+  <button data-f="word/girl/ch.m4a"><span class="big">🐛</span><span class="note">蟲 · ㄔ</span></button>
+  <button data-f="word/girl/sh.m4a"><span class="big">🦁</span><span class="note">獅子 · ㄕ</span></button>
+  <button data-f="word/girl/r.m4a"><span class="big">🍖</span><span class="note">肉 · ㄖ</span></button>
+  <button data-f="word/girl/z.m4a"><span class="big">👄</span><span class="note">嘴巴 · ㄗ</span></button>
+  <button data-f="word/girl/c.m4a"><span class="big">🍓</span><span class="note">草莓 · ㄘ</span></button>
+  <button data-f="word/girl/s.m4a"><span class="big">🌲</span><span class="note">森林 · ㄙ</span></button>
+  <button data-f="word/girl/i.m4a"><span class="big">🪑</span><span class="note">椅子 · ㄧ</span></button>
+  <button data-f="word/girl/u.m4a"><span class="big">🧸</span><span class="note">娃娃 · ㄨ</span></button>
+  <button data-f="word/girl/v.m4a"><span class="big">☂️</span><span class="note">雨傘 · ㄩ</span></button>
+  <button data-f="word/girl/e.m4a"><span class="big">🦢</span><span class="note">鵝 · ㄜ</span></button>
+  <button data-f="word/girl/ai.m4a"><span class="big">❤️</span><span class="note">愛心 · ㄞ</span></button>
+  <button data-f="word/girl/an.m4a"><span class="big">⛑️</span><span class="note">安全帽 · ㄢ</span></button>
+  <button data-f="word/girl/er.m4a"><span class="big">👂</span><span class="note">耳朵 · ㄦ</span></button>
+</div>
+<h2>語詞・男孩版（28）</h2>
+<div class="grid">
+  <button data-f="word/boy/b.m4a"><span class="big">⚾</span><span class="note">棒球 · ㄅ</span></button>
+  <button data-f="word/boy/p.m4a"><span class="big">🏀</span><span class="note">皮球 · ㄆ</span></button>
+  <button data-f="word/boy/m.m4a"><span class="big">🧢</span><span class="note">帽子 · ㄇ</span></button>
+  <button data-f="word/boy/f.m4a"><span class="big">✈️</span><span class="note">飛機 · ㄈ</span></button>
+  <button data-f="word/boy/d.m4a"><span class="big">🚋</span><span class="note">電車 · ㄉ</span></button>
+  <button data-f="word/boy/t.m4a"><span class="big">☀️</span><span class="note">太陽 · ㄊ</span></button>
+  <button data-f="word/boy/n.m4a"><span class="big">🐦</span><span class="note">鳥 · ㄋ</span></button>
+  <button data-f="word/boy/l.m4a"><span class="big">🐉</span><span class="note">龍 · ㄌ</span></button>
+  <button data-f="word/boy/g.m4a"><span class="big">🎹</span><span class="note">鋼琴 · ㄍ</span></button>
+  <button data-f="word/boy/k.m4a"><span class="big">🦖</span><span class="note">恐龍 · ㄎ</span></button>
+  <button data-f="word/boy/h.m4a"><span class="big">🚀</span><span class="note">火箭 · ㄏ</span></button>
+  <button data-f="word/boy/j.m4a"><span class="big">🧱</span><span class="note">積木 · ㄐ</span></button>
+  <button data-f="word/boy/q.m4a"><span class="big">🚗</span><span class="note">汽車 · ㄑ</span></button>
+  <button data-f="word/boy/x.m4a"><span class="big">⭐</span><span class="note">星星 · ㄒ</span></button>
+  <button data-f="word/boy/zh.m4a"><span class="big">🐙</span><span class="note">章魚 · ㄓ</span></button>
+  <button data-f="word/boy/ch.m4a"><span class="big">🦒</span><span class="note">長頸鹿 · ㄔ</span></button>
+  <button data-f="word/boy/sh.m4a"><span class="big">📖</span><span class="note">書 · ㄕ</span></button>
+  <button data-f="word/boy/r.m4a"><span class="big">🌭</span><span class="note">熱狗 · ㄖ</span></button>
+  <button data-f="word/boy/z.m4a"><span class="big">⚽</span><span class="note">足球 · ㄗ</span></button>
+  <button data-f="word/boy/c.m4a"><span class="big">🦔</span><span class="note">刺蝟 · ㄘ</span></button>
+  <button data-f="word/boy/s.m4a"><span class="big">🐿️</span><span class="note">松鼠 · ㄙ</span></button>
+  <button data-f="word/boy/i.m4a"><span class="big">👕</span><span class="note">衣服 · ㄧ</span></button>
+  <button data-f="word/boy/u.m4a"><span class="big">🐢</span><span class="note">烏龜 · ㄨ</span></button>
+  <button data-f="word/boy/v.m4a"><span class="big">🐟</span><span class="note">魚 · ㄩ</span></button>
+  <button data-f="word/boy/e.m4a"><span class="big">🦢</span><span class="note">鵝 · ㄜ</span></button>
+  <button data-f="word/boy/ai.m4a"><span class="big">💙</span><span class="note">愛心 · ㄞ</span></button>
+  <button data-f="word/boy/an.m4a"><span class="big">⛑️</span><span class="note">安全帽 · ㄢ</span></button>
+  <button data-f="word/boy/er.m4a"><span class="big">👂</span><span class="note">耳朵 · ㄦ</span></button>
+</div>
+<h2>介面語音（10）</h2>
+<div class="grid">
+  <button data-f="ui/listen.m4a"><span class="big">🔊</span><span class="note">listen</span></button>
+  <button data-f="ui/picture.m4a"><span class="big">🔊</span><span class="note">picture</span></button>
+  <button data-f="ui/blend.m4a"><span class="big">🔊</span><span class="note">blend</span></button>
+  <button data-f="ui/trace.m4a"><span class="big">🔊</span><span class="note">trace</span></button>
+  <button data-f="ui/right.m4a"><span class="big">🔊</span><span class="note">right</span></button>
+  <button data-f="ui/wrong.m4a"><span class="big">🔊</span><span class="note">wrong</span></button>
+  <button data-f="ui/again.m4a"><span class="big">🔊</span><span class="note">again</span></button>
+  <button data-f="ui/unit_done.m4a"><span class="big">🔊</span><span class="note">unit_done</span></button>
+  <button data-f="ui/pick_girl.m4a"><span class="big">🔊</span><span class="note">pick_girl</span></button>
+  <button data-f="ui/pick_boy.m4a"><span class="big">🔊</span><span class="note">pick_boy</span></button>
+</div>
+<script>
+const BASE='../dist/games/zhuyin/audio/';
+let audio=null,queue=null;
+function play(btn){
+  if(audio){audio.pause();}
+  audio=new Audio(BASE+btn.dataset.f);
+  audio.play().catch(e=>alert('播不出來：'+e.message+'\n如果是用 file:// 開啟，某些瀏覽器會擋，改用 python3 -m http.server 試試。'));
+  btn.classList.add('played');
+  btn.scrollIntoView({block:'center',behavior:'smooth'});
+  return audio;
+}
+document.querySelectorAll('button[data-f]').forEach(b=>b.addEventListener('click',e=>{
+  if(e.shiftKey){b.classList.toggle('flag');return;}
+  play(b);
+}));
+function playAll(){
+  const list=[...document.querySelectorAll('button[data-f]')];let i=0;
+  stopAll();
+  queue=()=>{ if(i>=list.length){queue=null;return;} const a=play(list[i++]); a.onended=()=>queue&&queue(); };
+  queue();
+}
+function stopAll(){ queue=null; if(audio){audio.pause();audio.onended=null;} }
+</script>
+</body></html>
