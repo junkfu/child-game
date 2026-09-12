@@ -72,12 +72,18 @@
           setTimeout(function () { done(!wrong); }, 620);
         } else {
           /* 答錯不結束、不扣分，只是這一題不算滿分。
-             暗掉選錯的，讓他繼續找 —— 一定要讓他看到正確答案。 */
+             暗掉選錯的，讓他繼續找 —— 一定要讓他看到正確答案。
+
+             先唸出「他點到的那一個」再放答錯音效，不要只放音效：
+             不然孩子只知道「錯了」，不知道自己按到的是什麼。
+             點錯本來就是認識符號的好時機。 */
           wrong = true;
           b.classList.add('nope');
           b.disabled = true;
           b.classList.add('shake');
-          Kid.audio.chime('wrong');
+          Kid.audio.say('audio/sym/' + id + '.m4a').then(function () {
+            Kid.audio.chime('wrong');
+          });
         }
       });
       grid.appendChild(b);
