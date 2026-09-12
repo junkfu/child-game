@@ -1,0 +1,25 @@
+dist/games/zhuyin/audio/sym/*.m4a 這 37 個注音符號發音音檔
+取自教育部《國語注音符號手冊》：
+
+    https://language.moe.gov.tw/001/Upload/files/site_content/M0001/juyin/index.html
+    原始檔：bopomofo_materials_20170213.zip 裡的 audio/F1.WAV – F37.WAV
+
+授權（引自手冊版權頁逐字）：
+
+    本手冊採用「創用CC 姓名標示–禁止改作 3.0 臺灣」授權條款釋出。
+    本手冊內含注音符號動畫XML、SVG檔，以及相關音檔，另採「創用CC 姓名標示
+    4.0 國際版本」授權條款提供，可於本手冊首頁獨立下載，歡迎各界利用。
+    利用此些檔案，視為符合政府資料開放授權條款之規定。
+
+亦即：手冊本體是 BY-ND（禁止改作），但音檔是 CC BY 4.0，允許改作與商業利用，
+只要標示出處。同一份資料亦公布於政府資料開放平臺 dataset 44640
+（https://data.gov.tw/dataset/44640），採政府資料開放授權條款第1版。
+
+本專案所做的修改（見 tools/prep-moe-wav.py）：
+  - 立體聲轉單聲道（取兩聲道平均）。
+  - 切除頭尾低於峰值 2% 的靜音，頭尾各保留 40ms 餘裕。
+  - 響度正規化到 rms 0.16，與專案其他合成音檔一致；峰值上限 0.95 避免削波。
+  - 由 44.1kHz 16-bit WAV 轉為 48kbps AAC (.m4a)。
+檔名對照見 tools/moe-audio-map.tsv。
+
+CC BY 4.0 全文：https://creativecommons.org/licenses/by/4.0/deed.zh_TW

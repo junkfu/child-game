@@ -1,2 +1,5 @@
 .DS_Store
 .sites-runtime/
+
+# 教育部音檔的下載快取，重跑 tools/make-audio.sh 會自動重抓
+tools/.cache/

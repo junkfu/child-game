@@ -1,0 +1,48 @@
+# 教育部《國語注音符號手冊》音檔 -> 本專案符號代號 的對照表
+#
+# 來源：bopomofo_materials_20170213.zip 裡的 audio/F*.WAV
+#       https://language.moe.gov.tw/001/Upload/files/site_content/M0001/juyin/index.html
+#
+# 這份表是從手冊 HTML 版裡 play('aN') 與 zhStroker('app','X') 的配對抽出來的，
+# 不是照慣例推的。特別注意檔名順序是「聲符21 + 韻符13 + 介符3」，
+# 不是常見的「聲符21 + 介符3 + 韻符13」——
+# F22 是ㄚ不是ㄧ，ㄧㄨㄩ 排在最後的 F35-F37。照慣例猜會錯 16 個。
+#
+# 欄位：MOE檔名編號	本專案代號	注音符號
+F1	b	ㄅ
+F2	p	ㄆ
+F3	m	ㄇ
+F4	f	ㄈ
+F5	d	ㄉ
+F6	t	ㄊ
+F7	n	ㄋ
+F8	l	ㄌ
+F9	g	ㄍ
+F10	k	ㄎ
+F11	h	ㄏ
+F12	j	ㄐ
+F13	q	ㄑ
+F14	x	ㄒ
+F15	zh	ㄓ
+F16	ch	ㄔ
+F17	sh	ㄕ
+F18	r	ㄖ
+F19	z	ㄗ
+F20	c	ㄘ
+F21	s	ㄙ
+F22	a	ㄚ
+F23	o	ㄛ
+F24	e	ㄜ
+F25	eh	ㄝ
+F26	ai	ㄞ
+F27	ei	ㄟ
+F28	ao	ㄠ
+F29	ou	ㄡ
+F30	an	ㄢ
+F31	en	ㄣ
+F32	ang	ㄤ
+F33	eng	ㄥ
+F34	er	ㄦ
+F35	i	ㄧ
+F36	u	ㄨ
+F37	v	ㄩ
