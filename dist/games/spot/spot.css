@@ -93,6 +93,10 @@
   background-position: var(--bg-x, 0%) var(--bg-y, 0%);
 }
 .changes, .marks { pointer-events: none; }
+.changes { z-index: 1; }
+/* 透明按鈕只供鍵盤使用，避免已停用的按鈕攔下重疊區域的觸控。 */
+.objects { z-index: 2; pointer-events: none; }
+.marks { z-index: 3; }
 
 /* B 面只透過 10 個橢圓遮罩露出編修版本，遮罩外仍是原圖 ——
    這樣圖片生成工具重繪時不會引入沒列入答案的差異。 */
@@ -104,6 +108,8 @@
   mask-image: radial-gradient(ellipse var(--rx) var(--ry) at var(--x) var(--y), #000 82%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse var(--rx) var(--ry) at var(--x) var(--y), #000 82%, transparent 100%);
 }
+
+.scene-change.varied { z-index: 1; background-image: url('assets/scenes-varied.png'); }
 
 /* 透明的可聚焦按鈕：滑鼠走座標判定用不到，鍵盤 Tab 靠它們作答。 */
 .object {
@@ -118,7 +124,7 @@
 .found-mark, .miss-mark {
   position: absolute;
   left: calc(var(--x) * 1%); top: calc(var(--y) * 1%);
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
   display: grid; place-items: center;
 }
 .found-mark {

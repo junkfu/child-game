@@ -45,6 +45,7 @@
 <script src="modes/picture.js" defer></script>
 <script src="modes/blend.js" defer></script>
 <script src="modes/trace.js" defer></script>
+<script src="modes/adventure.js?v=4" defer></script>
 <script defer>
 window.addEventListener('load', function () {
   const Z = window.Kid.zhuyin;
@@ -56,6 +57,7 @@ window.addEventListener('load', function () {
     const panes = document.getElementById('panes');
     panes.innerHTML = '';
     [
+      ['點心任務 adventure', Z.modes.adventure.build(ctx)[0]],
       ['認識一下 meet', Z.modes.meet.build(ctx)[0]],
       ['聽音找符號 listen', Z.modes.listen.build(ctx, 1)[0]],
       ['看圖配注音 picture', Z.modes.picture.build(ctx, 1)[0]],

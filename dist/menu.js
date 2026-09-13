@@ -15,6 +15,12 @@
     const head = Kid.el('div', 'game-head');
     const icon = Kid.el('span', 'game-icon', game.icon);
     icon.setAttribute('aria-hidden', 'true');
+    if (game.art) {
+      icon.textContent = '';
+      icon.style.backgroundImage = 'url("' + game.art + '")';
+      icon.style.backgroundSize = '500% 200%';
+      icon.style.backgroundPosition = '0% 0%';
+    }
     const text = Kid.el('div');
     text.appendChild(Kid.el('h2', null, game.title));
     text.appendChild(Kid.el('p', 'sub', game.sub));

@@ -31,7 +31,7 @@
 
   /* 每關的差異範圍，格式 [中心x%, 中心y%, 水平半徑%, 垂直半徑%]。
      畫面變化、點擊判定、提示圈圈共用同一份資料。 */
-  const regions = [[[18.5, 4, 3, 4], [55, 28, 5, 6], [93, 51, 7, 10], [95, 67, 7, 9], [2, 66, 5, 14], [4, 37, 3, 10], [26, 70, 7, 9], [36, 81, 3, 4], [50, 80, 6, 6], [67, 85, 4, 4]], [[45, 4, 7, 5], [47, 15, 4, 5], [75, 25, 4, 4], [12, 85, 5, 12], [35, 91, 7, 7], [56, 93, 8, 7], [83, 84, 5, 13], [89, 61, 8, 13], [23, 80, 5, 10], [74, 80, 6, 10]], [[49, 28, 12, 10], [40, 8, 6, 6], [80, 10, 4, 5], [22, 27, 4, 6], [7, 42, 9, 5], [93, 42, 9, 5], [35, 70, 4, 6], [51, 68, 6, 6], [67, 75, 4, 5], [53, 91, 7, 12]], [[14, 10, 7, 5], [36, 20, 13, 9], [83, 27, 6, 6], [73, 14, 4, 4], [10, 32, 6, 14], [95, 29, 5, 11], [25, 83, 6, 11], [49, 85, 5, 7], [81, 73, 7, 12], [63, 86, 5, 8]], [[8, 65, 5, 8], [80, 69, 6, 5], [87, 93, 12, 6], [19, 5, 9, 5], [94, 75, 7, 12], [67, 35, 3, 7], [29, 74, 6, 12], [64, 73, 8, 12], [33, 65, 3, 4], [84, 15, 9, 6]], [[25, 20, 6, 7], [50, 7, 4, 7], [66, 20, 5, 10], [94, 4, 10, 5], [17, 36, 3, 7], [58, 40, 5, 7], [26, 83, 6, 10], [53, 81, 6, 6], [76, 83, 8, 10], [83, 36, 5, 6]], [[59, 10, 6, 7], [18, 34, 6, 8], [91, 28, 6, 10], [91, 66, 7, 12], [25, 81, 7, 11], [43, 79, 7, 10], [66, 83, 8, 11], [49, 94, 11, 6], [88, 89, 9, 5], [5, 46, 4, 5]], [[92, 31, 14, 11], [35, 9, 8, 5], [94, 88, 8, 11], [96, 64, 6, 14], [12, 54, 3, 5], [28, 67, 7, 8], [52, 74, 6, 6], [76, 70, 7, 10], [23, 93, 9, 7], [85, 83, 4, 4]], [[9, 82, 10, 5], [92, 85, 9, 5], [32, 76, 4, 5], [67, 76, 4, 5], [97, 16, 3, 8], [42, 10, 7, 9], [26, 78, 6, 12], [50, 70, 5, 6], [72, 78, 7, 12], [49, 90, 4, 10]], [[49, 19, 21, 18], [18, 9, 7, 12], [85, 10, 7, 12], [7, 90, 5, 9], [86, 90, 3, 7], [49, 63, 3, 6], [26, 62, 7, 10], [51, 70, 5, 6], [69, 76, 4, 5], [73, 90, 5, 6]]];
+  const regions = Kid.spotDifferences;
 
   const $ = Kid.$;
   const praises = [
@@ -45,7 +45,7 @@
   function diffCount(level) { return regions[level].length; }
   function puzzle(level) {
     return regions[level].map(function (p, i) {
-      return { x: p[0], y: p[1], rx: p[2], ry: p[3], diff: i };
+      return { x: p[0], y: p[1], rx: p[2], ry: p[3], description: p[4], kind: p[5], diff: i };
     });
   }
   function isComplete(i) { return progress[i].size >= diffCount(i); }
@@ -55,10 +55,14 @@
 
   /* ── 狀態 ─────────────────────────────────────────── */
   const saved = Kid.store.game(GAME_ID);
+  const edition = 'variety-2';
+  const previousEdition = saved.edition === edition ? saved.previousEdition
+    : { edition: saved.edition || 'original', current: saved.current, found: saved.found };
+  const activeFound = saved.edition === edition ? saved.found : [];
   let current = Number.isInteger(saved.current) && saved.current >= 0 && saved.current < levels.length
     ? saved.current : 0;
   const progress = levels.map(function (_, i) {
-    const raw = Array.isArray(saved.found && saved.found[i]) ? saved.found[i] : [];
+    const raw = Array.isArray(activeFound && activeFound[i]) ? activeFound[i] : [];
     return new Set(raw.filter(function (v) {
       return Number.isInteger(v) && v >= 0 && v < diffCount(i);
     }));
@@ -67,6 +71,8 @@
 
   function save() {
     Kid.store.saveGame(GAME_ID, {
+      edition: edition,
+      previousEdition: previousEdition,
       current: current,
       found: progress.map(function (s) { return Array.from(s); }),
     });
@@ -113,7 +119,7 @@
       }).join('');
       scene.querySelector('.changes').innerHTML = side === 'b'
         ? puzzle(current).map(function (item) {
-            return '<div class="scene-change" style="--x:' + item.x + '%;--y:' + item.y +
+            return '<div class="scene-change' + (item.kind === 'color' ? '' : ' varied') + '" style="--x:' + item.x + '%;--y:' + item.y +
               '%;--rx:' + item.rx + '%;--ry:' + item.ry + '%"></div>';
           }).join('')
         : '';
@@ -205,7 +211,7 @@
     clearHint();
     const item = puzzle(current).find(function (p) { return !progress[current].has(p.diff); });
     mark(item, true);
-    Kid.toast('看看黃色圈圈裡，顏色或小細節有沒有改變？');
+    Kid.toast('看看黃色圈圈裡，形狀、物品或顏色有沒有改變？');
     hintTimer = setTimeout(clearHint, 4500);
     return { level: current + 1, x: item.x, y: item.y };
   }

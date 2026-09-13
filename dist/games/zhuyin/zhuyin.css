@@ -191,3 +191,86 @@
   .play-head .btn { padding: 12px 16px; }
   .q-options { max-width: 100%; }
 }
+
+/* 點心派對：圖片角色是任務、回饋與收藏的同一位夥伴。 */
+body { background: radial-gradient(ellipse at 15% 10%, #fff1c9 0, transparent 45%), var(--paper); }
+.friend-art { display: block; flex-shrink: 0; width: 180px; aspect-ratio: 1; background-image: url('assets/adventure/friends.png'); background-size: 500% 200%; background-repeat: no-repeat; border-radius: 30%; }
+.pick-face .friend-art { width: 160px; }
+.eyebrow { color: var(--brand); font-size: 12px; letter-spacing: .16em; font-weight: 800; }
+.map-head h1 { margin-top: 8px; }
+.map-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 28px; }
+.unit-map { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.unit { align-items: center; text-align: center; padding: 12px; overflow: hidden; background: #fffaf0; }
+.map-friend { width: min(100%, 150px); transition: transform .2s; }
+.unit:hover .map-friend { transform: rotate(-7deg) scale(1.06); }
+.friend-name { color: #714c31; font-size: 19px; }
+.unit-glyphs { font-size: 26px; padding: 0; justify-content: center; }
+.unit-sub { font-size: 12px; }
+.unit.done::after { content: '已加入 ♥'; position: absolute; top: 10px; left: 8px; background: #e6f6ce; color: #486028; border-radius: 20px; padding: 4px 8px; font-size: 11px; }
+.unit-n { z-index: 1; }
+.snack-trail { display: flex; justify-content: center; gap: 14px; margin: 0 0 10px; color: #d1bd91; font-size: 25px; }
+.snack-trail .earned { color: #d49318; }
+.adventure-round { width: 100%; max-width: 850px; margin: auto; text-align: center; padding-bottom: 28px; }
+.snack-scene { display: flex; align-items: center; justify-content: center; gap: 24px; min-height: 255px; padding: 16px; background: radial-gradient(ellipse at bottom, #cce7af 0 25%, transparent 26%), linear-gradient(155deg, #fff4d4, #fffcf0); border-radius: 38px; border: 3px solid #fff; box-shadow: 0 8px 0 #eadbbd; }
+.buddy { border: 0; background: transparent; padding: 0; cursor: pointer; border-radius: 35%; }
+.buddy .friend-art { width: clamp(160px, 27vw, 245px); }
+.buddy-bubble { display: flex; align-items: center; flex-direction: column; justify-content: center; gap: 8px; background: white; border-radius: 25px 25px 25px 5px; padding: 18px; width: 240px; min-height: 175px; color: #775738; }
+.buddy-bubble strong { font-size: 18px; }
+.snack-clue { font-size: 80px; color: var(--brand); }
+.snack-controls { display: flex; justify-content: center; gap: 12px; margin: 24px 0 12px; }
+.snack-status { min-height: 28px; font-size: 17px; color: #775738; margin-bottom: 18px; }
+.snack-options { display: flex; justify-content: center; gap: clamp(14px, 4vw, 36px); }
+.snack { position: relative; width: clamp(90px, 18vw, 132px); aspect-ratio: 1; display: grid; place-items: center; color: #77461c; font-size: clamp(52px, 9vw, 74px); cursor: pointer; transition: transform .2s; }
+.cookie { border-radius: 40%; border: 5px solid #dda65f; background: radial-gradient(circle at 18% 25%, #c48c46 0 3px, transparent 4px), radial-gradient(circle at 78% 73%, #c48c46 0 3px, transparent 4px), #ffe0a0; box-shadow: 0 7px 0 #bd853e, inset 0 0 0 5px #ffedc4; }
+.gem { border: 5px solid #70bfc8; background: #d4f6f6; border-radius: 28% 28% 42% 42%; color: #256c87; box-shadow: 0 7px 0 #65a4b5, inset 0 0 0 6px #eefdff; }
+.snack:hover:not(:disabled) { transform: translateY(-7px) rotate(-5deg); }
+.snack:active:not(:disabled) { transform: translateY(3px); }
+.snack.tried { opacity: .65; }
+.snack.help-glow { outline: 5px solid #c3d968; outline-offset: 5px; }
+.snack.delivered { animation: deliver .65s ease-in forwards; }
+.snack-heart { font-size: 65px; color: #e58092; }
+.snack-sticker.pic { width: 120px; height: 120px; }
+.snack-sticker .pic-emoji { font-size: 65px; }
+.reward-friend { width: 230px; margin: auto; animation: happy .8s ease-in-out 2; }
+.wiggle { animation: happy .6s ease-in-out; }
+.celebrate { animation: happy .65s ease-in-out 2; }
+.pic-atlas { background-repeat: no-repeat; background-size: 700% 400%; }
+.pic-atlas .pic-emoji { display: none; }
+.pic[role='button']:active { transform: rotate(-5deg) scale(1.05); }
+@keyframes happy { 0%,100% { transform: rotate(0); } 25% { transform: translateY(-12px) rotate(-9deg); } 75% { transform: translateY(-6px) rotate(9deg); } }
+@keyframes deliver { to { transform: translateY(-95px) scale(.15) rotate(30deg); opacity: 0; } }
+@media (max-width: 850px) { .unit-map { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 520px) {
+  .unit-map { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .topbar { gap: 8px; } .top-actions { gap: 5px; } #switch-profile { font-size: 12px; padding: 10px; }
+  .snack-scene { gap: 6px; padding: 10px; min-height: 195px; border-radius: 25px; }
+  .buddy .friend-art { width: 135px; } .buddy-bubble { width: 160px; min-height: 160px; padding: 12px 8px; }
+  .buddy-bubble strong { font-size: 15px; } .snack-clue { font-size: 66px; }
+  .snack-controls { margin-top: 18px; } .snack-status { font-size: 15px; }
+  .play-meta strong { font-size: 13px; } .snack-trail { margin-bottom: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .snack.delivered { opacity: .3; }
+}
+@media (min-width: 521px) and (max-height: 850px) {
+  .play-wrap { padding-top: 12px; }
+  .play-meter { margin-bottom: 6px; }
+  .snack-trail { margin-bottom: 4px; font-size: 20px; }
+  .snack-scene { min-height: 200px; padding: 10px; }
+  .buddy .friend-art { width: 185px; }
+  .buddy-bubble { min-height: 160px; padding: 12px; }
+  .snack-controls { margin-top: 16px; margin-bottom: 6px; }
+  .snack-status { margin-bottom: 10px; }
+  .snack { width: 105px; font-size: 60px; }
+  .adventure-round { padding-bottom: 15px; }
+}
+[data-practice='true'] .snack-trail { display: none; }
+.play-wrap { min-height: 0; }
+@media (max-width: 520px) {
+  .play-wrap { padding-top: 8px; }
+  .play-head { margin-bottom: 6px; }
+  .play-meter { margin-bottom: 6px; }
+  .snack-trail { font-size: 20px; margin-bottom: 5px; }
+  .adventure-round { padding-bottom: 10px; }
+}

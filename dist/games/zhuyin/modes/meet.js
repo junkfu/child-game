@@ -62,7 +62,15 @@
     const img = new Image();
     img.alt = word.word;
     img.className = 'pic-img';
-    img.addEventListener('load', function () { box.classList.add('has-img'); box.appendChild(img); });
+    box.setAttribute('role', 'img');
+    box.setAttribute('aria-label', word.word);
+    img.addEventListener('load', function () {
+      if (word.atlasIndex != null) {
+        box.classList.add('pic-atlas');
+        box.style.backgroundImage = 'url("' + word.img + '")';
+        box.style.backgroundPosition = (word.atlasIndex % 7 * 100 / 6) + '% ' + (Math.floor(word.atlasIndex / 7) * 100 / 3) + '%';
+      } else { box.classList.add('has-img'); box.appendChild(img); }
+    });
     img.src = word.img;
     return box;
   }

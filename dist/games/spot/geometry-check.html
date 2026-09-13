@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8">
+<title>找碴圈選定位回歸檢查</title>
+<link rel="stylesheet" href="../../shared/shell.css">
+<link rel="stylesheet" href="spot.css?v=4">
+<h1>找碴圈選定位回歸檢查</h1><pre id="result">檢查中</pre><div id="fixture"></div>
+<script>
+window.addEventListener('load', async function () {
+  const failures = []; let checks = 0;
+  for (const width of [280, 460, 800]) {
+    const scene = document.createElement('div');
+    scene.className = 'scene'; scene.style.width = width + 'px';
+    document.getElementById('fixture').appendChild(scene);
+    for (const cls of ['found-mark', 'found-mark hint-mark', 'miss-mark']) {
+      for (const point of [[18.5,4,3,4], [50,50,10,12], [93,85,5,8]]) {
+        const m = document.createElement('span'); m.className = cls;
+        m.style.cssText = '--x:'+point[0]+';--y:'+point[1]+';--rx:'+point[2]+';--ry:'+point[3];
+        scene.appendChild(m);
+        for (const time of [50,150,550,900]) {
+          const animations = m.getAnimations();
+          animations.forEach(a => { a.pause(); a.currentTime = time; });
+          await new Promise(requestAnimationFrame);
+          const r = scene.getBoundingClientRect(), b = m.getBoundingClientRect();
+          const error = Math.hypot(b.x+b.width/2-r.x-r.width*point[0]/100, b.y+b.height/2-r.y-r.height*point[1]/100);
+          checks++;
+          if (error > 0.1) failures.push({width,cls,time,error});
+        }
+        m.remove();
+      }
+    }
+    scene.remove();
+  }
+  document.getElementById('result').textContent = failures.length ? 'FAIL '+JSON.stringify(failures) : 'PASS '+checks+' checks：不同尺寸、動畫階段與邊緣座標皆置中。';
+});
+</script></html>

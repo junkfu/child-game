@@ -81,9 +81,12 @@
   };
 
   /* 每一筆自動補上圖檔路徑，省得手寫 74 次。 */
+  const WORD_ART_ORDER = 'b p m f d t n l g k h j q x zh ch sh r z c s i u v e ai an er'.split(' ');
   Object.keys(WORDS).forEach(function (id) {
+    const index = WORD_ART_ORDER.indexOf(id);
     ['girl', 'boy'].forEach(function (deck) {
-      WORDS[id][deck].img = 'assets/' + deck + '/' + id + '.png';
+      WORDS[id][deck].img = 'assets/adventure/' + (deck === 'girl' ? 'garden' : 'space') + '-words.png';
+      WORDS[id][deck].atlasIndex = index;
       WORDS[id][deck].audio = 'audio/word/' + deck + '/' + id + '.m4a';
     });
   });

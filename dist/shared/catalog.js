@@ -25,8 +25,9 @@
     {
       id: 'zhuyin',
       title: '注音大冒險',
-      sub: '聽一聽、找一找、描一描，認識ㄅㄆㄇ',
-      icon: 'ㄅ',
+      sub: '餵注音餅乾、找寶石，收集 10 位小怪獸',
+      icon: '🦕',
+      art: 'games/zhuyin/assets/adventure/friends.png',
       href: 'games/zhuyin/index.html',
       tint: '#e8833a',
       progress: function (s) {
