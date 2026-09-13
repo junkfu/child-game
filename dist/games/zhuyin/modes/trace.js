@@ -33,6 +33,7 @@
      還沒開始描就先有一塊墨（ㄎ ㄓ 特別明顯）。
      把空白設得比筆畫本身長，空白就蓋過整條路徑，實線永遠排不進來。 */
   const GAP_PAD = 24;
+  const CIRCLED = ['①', '②', '③', '④', '⑤'];
   const ASSIST_MS = 20000;
 
   function el(tag, attrs) {
@@ -75,7 +76,8 @@
     host.innerHTML = '';
 
     const wrap = Kid.el('div', 'q trace');
-    wrap.appendChild(Kid.el('p', 'q-hint', '跟著虛線描描看，從 ① 開始'));
+    const hintText = Kid.el('p', 'q-hint', '');
+    wrap.appendChild(hintText);
 
     const stage = Kid.el('div', 'trace-stage');
     const svg = el('svg', { viewBox: '0 0 ' + VB + ' ' + VB, class: 'trace-svg' });
@@ -148,6 +150,11 @@
       startNum.setAttribute('x', pts[0][0]);
       startNum.setAttribute('y', pts[0][1] + 30);
       startNum.textContent = idx + 1;
+      /* 提示裡的編號要跟著目前這一筆走。寫死 ① 的話，
+         描到第二筆時畫面顯示 ② 而字還寫著 ①，孩子會找不到起點。 */
+      hintText.textContent = strokes.length > 1
+        ? '第 ' + (idx + 1) + ' 筆，從 ' + CIRCLED[idx] + ' 開始描'
+        : '跟著虛線描描看，從 ' + CIRCLED[idx] + ' 開始';
       guide.style.display = '';
       startDot.style.display = '';
       startNum.style.display = '';
