@@ -16,7 +16,7 @@
   } catch (e) {}
 </script>
 <link rel="stylesheet" href="../../shared/shell.css?v=1">
-<link rel="stylesheet" href="zhuyin.css?v=2">
+<link rel="stylesheet" href="zhuyin.css?v=3">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
     <span class="eyebrow">MONSTER PICNIC CLUB</span><h1>今天，和誰一起玩？</h1>
     <p id="map-progress">已完成 0 / 10 關</p>
   </div>
-  <div class="map-actions"><button class="btn btn-primary" id="quick-start">▶ 開始點心任務</button><button class="btn btn-ghost" id="practice">✎ 練習上次的符號與描寫</button></div>
+  <div class="map-actions"><button class="btn btn-primary" id="quick-start">▶ 開始點心任務</button><button class="btn btn-ghost" id="practice">✎ 練習上次的符號與描寫</button><button class="btn btn-ghost" id="write-all">✏ ㄅㄆㄇ寫字</button></div>
   <div class="unit-map" id="unit-map"></div>
 </main>
 
@@ -74,6 +74,28 @@
   <div class="meter play-meter"><i id="step-fill"></i></div>
   <div id="snack-trail" class="snack-trail"></div>
   <div id="stage" class="stage"></div>
+</main>
+
+<!-- 寫字：37 個符號排成一張表，點哪個就描哪個，描完自動接下一個 -->
+<main class="wrap write-wrap" data-screen="write" hidden>
+  <div class="play-head">
+    <button class="btn btn-ghost" id="write-back"><span aria-hidden="true">←</span> 回地圖</button>
+    <div class="play-meta">
+      <strong>ㄅㄆㄇ寫字</strong>
+      <span id="write-progress">已描 0 / 37</span>
+    </div>
+  </div>
+  <div class="write-layout">
+    <section class="write-desk">
+      <div id="write-stage" class="write-stage"></div>
+      <div class="write-nav">
+        <button class="btn" id="write-prev"><span aria-hidden="true">◀</span> 上一個</button>
+        <button class="btn btn-ghost" id="write-say" aria-label="再聽一次這個符號">🔊</button>
+        <button class="btn" id="write-next">下一個 <span aria-hidden="true">▶</span></button>
+      </div>
+    </section>
+    <section class="write-board" id="write-board" aria-label="選一個符號來描"></section>
+  </div>
 </main>
 
 <!-- 單元結算 -->
@@ -104,8 +126,9 @@
 <script src="modes/listen.js?v=1" defer></script>
 <script src="modes/picture.js?v=1" defer></script>
 <script src="modes/blend.js?v=1" defer></script>
-<script src="modes/trace.js?v=1" defer></script>
+<script src="modes/trace.js?v=2" defer></script>
 <script src="modes/adventure.js?v=4" defer></script>
-<script src="zhuyin.js?v=2" defer></script>
+<script src="write.js?v=1" defer></script>
+<script src="zhuyin.js?v=3" defer></script>
 </body>
 </html>

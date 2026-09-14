@@ -3,7 +3,7 @@
   'use strict';
 
   function card(game) {
-    const state = Kid.store.game(game.id);
+    const state = Kid.store.game(game.store || game.id);
     const p = game.progress(state);
     const pct = p.total ? Math.round(p.done / p.total * 100) : 0;
 

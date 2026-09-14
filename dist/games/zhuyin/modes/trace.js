@@ -138,6 +138,11 @@
     let pts, cum, total;
     let hintTimer, assistTimer;
 
+    /* 這個畫面還在不在。換符號或回地圖時 host 會被清空，但 8 秒／20 秒的
+       計時器和示範動畫還排在那裡；不擋下來的話，會在別的畫面上跳出
+       「我先幫你畫一次」、唸出早就不在畫面上的符號。 */
+    function alive() { return svg.isConnected; }
+
     function loadStroke() {
       const s = strokes[idx];
       pts = s.m;
@@ -173,6 +178,7 @@
       /* 停 8 秒：讓起筆點閃一下當提示。連續卡三次就直接幫忙，
          不用等滿 20 秒 —— 卡三次代表他真的描不動了。 */
       hintTimer = setTimeout(function () {
+        if (!alive()) return;
         startDot.classList.add('nudge');
         stalls++;
         if (stalls >= 3) assist();
@@ -183,6 +189,7 @@
     /* 卡太久就幫他描完這一筆，一樣往下走，不當作失敗 */
     function assist() {
       clearTimeout(hintTimer); clearTimeout(assistTimer);
+      if (!alive()) return;
       Kid.toast('我先幫你畫一次，換你囉 ♡');
       animateStroke(idx, maxS, function () { retries++; finishStroke(); });
     }
@@ -193,6 +200,7 @@
       const t0 = performance.now();
       const dur = 700;
       (function step(now) {
+        if (!alive()) return;
         const k = Math.min(1, (now - t0) / dur);
         const s = fromS + (len - fromS) * k;
         p.style.strokeDashoffset = Math.max(0, len - s);
@@ -302,7 +310,19 @@
     bar.appendChild(skip);
 
     loadStroke();
-    Kid.audio.say('audio/ui/trace.m4a');
+    announce();
+
+    /* 開場語音。練習串裡每題都唸一次「跟著虛線描描看」；寫字頁換符號很頻繁，
+       只在第一次唸指令（announce: false 略過），之後只唸符號本身（sayName），
+       小孩才知道自己點到的是哪個音。中途換了符號就不再接下一段。 */
+    async function announce() {
+      const clips = q.announce === false ? [] : ['audio/ui/trace.m4a'];
+      if (q.sayName) clips.push('audio/sym/' + q.symbol + '.m4a');
+      for (const clip of clips) {
+        if (!alive()) return;
+        await Kid.audio.say(clip);
+      }
+    }
   }
 
   Z.modes = Z.modes || {};
