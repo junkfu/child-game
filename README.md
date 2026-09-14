@@ -5,9 +5,13 @@
 
 不倒數、不扣分、沒有失敗畫面。主要給平板用。
 
+**線上玩：<https://junkfu.github.io/child-game/>**
+
 ![主選單](docs/01-menu.png)
 
 ## 開始玩
+
+直接開 <https://junkfu.github.io/child-game/>，平板也一樣。要離線玩的話：
 
 ```sh
 open dist/index.html                            # 或直接點兩下
