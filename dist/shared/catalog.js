@@ -89,7 +89,7 @@
       tint: '#e0663f',
       progress: function (s) {
         const seen = (s && s.seen) || {};
-        return { done: Object.keys(seen).length, total: 30, unit: '張' };
+        return { done: Object.keys(seen).length, total: 100, unit: '張' };
       },
     },
   ];
