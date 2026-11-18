@@ -19,7 +19,7 @@
       icon.textContent = '';
       icon.style.backgroundImage = 'url("' + game.art + '")';
       icon.style.backgroundSize = '500% 200%';
-      icon.style.backgroundPosition = '0% 0%';
+      icon.style.backgroundPosition = game.artPos || '0% 0%';
     }
     const text = Kid.el('div');
     text.appendChild(Kid.el('h2', null, game.title));

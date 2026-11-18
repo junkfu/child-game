@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f2faf7">
+<meta name="description" content="用手指帶著小怪獸走出迷宮回家。10 座迷宮由小到大、不限時、按一下就有提示，適合幼兒的觸控迷宮遊戲。">
+<title>小怪獸迷宮</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%232f9c8c'/%3E%3Cpath d='M32 13 12 31h6v20h11V38h6v13h11V31h6z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="../../shared/shell.css?v=1">
+<link rel="stylesheet" href="maze.css?v=1">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="../../index.html">
+    <span class="brand-mark" aria-hidden="true">←</span>
+    <span>小怪獸迷宮<small>手指帶路，走出去回家</small></span>
+  </a>
+  <div class="top-actions">
+    <button class="icon-btn" id="sound" aria-pressed="true" aria-label="關閉聲音">♫</button>
+    <button class="icon-btn" id="help" aria-label="玩法說明">?</button>
+  </div>
+</header>
+
+<main class="wrap maze-page">
+  <div class="maze-top">
+    <div class="level-path">
+      <div class="path-label">
+        <span class="path-star" aria-hidden="true">✦</span>
+        <div>選一位夥伴<small id="progress">已走出 0 / 10 座迷宮</small></div>
+      </div>
+      <nav class="level-buttons" id="levels" aria-label="選擇關卡"></nav>
+    </div>
+  </div>
+
+  <div class="maze-sub">
+    <p class="instruction" id="instruction" aria-live="polite"></p>
+    <div class="game-actions">
+      <button class="btn" id="hint"><span aria-hidden="true">💡</span> 幫幫我</button>
+      <button class="btn btn-ghost" id="shuffle"><span aria-hidden="true">✦</span> 換一座迷宮</button>
+    </div>
+  </div>
+
+  <div class="maze-board" id="board" role="application" tabindex="0"></div>
+</main>
+
+<dialog id="help-dialog">
+  <button class="dialog-close" data-close aria-label="關閉說明">×</button>
+  <div class="dialog-art" aria-hidden="true">🏠</div>
+  <h2>帶小怪獸回家！</h2>
+  <ol>
+    <li>手指先摸到小怪獸，再拖著牠走。</li>
+    <li>撞到牆牠會停下來，換一條路試試看。</li>
+    <li>走到房子就成功了。每一關的迷宮都不一樣！</li>
+  </ol>
+  <p>不倒數、不扣分。迷路了就按「幫幫我」，虛線會告訴你路。</p>
+  <button class="btn btn-primary" data-close>我知道了，出發！</button>
+</dialog>
+
+<dialog id="win-dialog">
+  <div class="dialog-art" id="win-art" aria-hidden="true"></div>
+  <h2 id="win-title">回家了！</h2>
+  <p id="win-copy"></p>
+  <div class="win-stars" aria-hidden="true">★ ★ ★</div>
+  <button class="btn btn-primary" id="next">下一關，出發！ →</button>
+  <button class="btn btn-ghost" id="again">再走一次，換新迷宮</button>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="../../shared/storage.js?v=1" defer></script>
+<script src="../../shared/audio.js?v=1" defer></script>
+<script src="../../shared/core.js?v=1" defer></script>
+<script src="maze-core.js?v=1" defer></script>
+<script src="maze.js?v=1" defer></script>
+</body>
+</html>

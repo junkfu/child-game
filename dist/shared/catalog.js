@@ -38,6 +38,20 @@
       },
     },
     {
+      id: 'maze',
+      title: '小怪獸迷宮',
+      sub: '手指帶著小怪獸，繞過牆壁走出去回家',
+      icon: '🏠',
+      art: 'games/zhuyin/assets/adventure/friends.png',
+      artPos: '100% 100%',
+      href: 'games/maze/index.html',
+      tint: '#2f9c8c',
+      progress: function (s) {
+        const done = (s && s.done) || {};
+        return { done: Object.keys(done).filter(function (k) { return done[k]; }).length, total: 10, unit: '關' };
+      },
+    },
+    {
       /* 注音大冒險裡的寫字頁，直接用 #write 開進去。進度和注音大冒險存在同一格，
          所以用 store 指過去，不另開一份。 */
       id: 'zhuyin-write',
