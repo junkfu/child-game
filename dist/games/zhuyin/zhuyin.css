@@ -322,3 +322,48 @@ body { background: radial-gradient(ellipse at 15% 10%, #fff1c9 0, transparent 45
   .snack-trail { font-size: 20px; margin-bottom: 5px; }
   .adventure-round { padding-bottom: 10px; }
 }
+
+/* ── 抽聲母卡 ───────────────────────────────────────── */
+/* 卡片是一顆按鈕，兩面疊在一起用 3D 翻轉。卡片尺寸跟著視窗高度走，
+   直放、橫放平板都能讓「抽一張」留在一屏內。 */
+.cards-wrap { padding-top: 12px; }
+.flash-desk { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.flash-card {
+  position: relative; width: min(78vw, 42vh, 360px); aspect-ratio: 3 / 4;
+  padding: 0; border: 0; background: none; cursor: pointer; perspective: 1200px;
+}
+.flash-face {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px;
+  background: var(--card); border: 4px solid var(--line); border-radius: var(--radius-lg);
+  box-shadow: 0 8px 0 var(--shadow); backface-visibility: hidden;
+  transition: transform .45s cubic-bezier(.3, 1.4, .5, 1);
+}
+.flash-front { color: var(--brand); font-size: min(52vw, 27vh, 240px); }
+.flash-front .glyph { width: .9em; height: .9em; }
+.flash-empty { font-size: .6em; font-weight: 800; color: var(--ink-faint); }
+.flash-back { transform: rotateY(180deg); color: var(--brand); font-size: min(20vw, 11vh, 90px); }
+.flash-back .pic { width: min(44vw, 24vh, 200px); height: min(44vw, 24vh, 200px); }
+.flash-word { font-size: clamp(22px, 4vh, 32px); color: var(--ink); letter-spacing: .1em; }
+.flash-card.flipped .flash-front { transform: rotateY(-180deg); }
+.flash-card.flipped .flash-back { transform: rotateY(0); }
+.flash-card.deal { animation: flash-deal .4s ease-out; }
+@keyframes flash-deal {
+  from { transform: translateY(-30px) rotate(-8deg) scale(.85); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.deal-glyph { font-size: min(40vw, 22vh, 180px); color: var(--brand); }
+.deal-glyph .glyph { width: .9em; height: .9em; }
+.flash-hint { color: var(--ink-soft); font-size: 17px; min-height: 1.5em; }
+.flash-draw { min-height: var(--tap-lg); padding-inline: 40px; font-size: 24px; }
+.flash-trail { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 560px; }
+.flash-mini {
+  width: 40px; height: 40px; display: grid; place-items: center; font-size: 26px;
+  color: var(--ink-soft); background: var(--card); border: 2px solid var(--line); border-radius: 10px;
+}
+.flash-mini .glyph { width: .85em; height: .85em; }
+.flash-mini.current { color: var(--brand); border-color: var(--brand); }
+@media (prefers-reduced-motion: reduce) {
+  .flash-face { transition: none; }
+  .flash-card.deal { animation: none; }
+}

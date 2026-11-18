@@ -15,8 +15,8 @@
     if (p) document.documentElement.dataset.theme = p;
   } catch (e) {}
 </script>
-<link rel="stylesheet" href="../../shared/shell.css?v=1">
-<link rel="stylesheet" href="zhuyin.css?v=3">
+<link rel="stylesheet" href="../../shared/shell.css?v=2">
+<link rel="stylesheet" href="zhuyin.css?v=5">
 </head>
 <body>
 
@@ -58,7 +58,7 @@
     <span class="eyebrow">MONSTER PICNIC CLUB</span><h1>今天，和誰一起玩？</h1>
     <p id="map-progress">已完成 0 / 10 關</p>
   </div>
-  <div class="map-actions"><button class="btn btn-primary" id="quick-start">▶ 開始點心任務</button><button class="btn btn-ghost" id="practice">✎ 練習上次的符號與描寫</button><button class="btn btn-ghost" id="write-all">✏ ㄅㄆㄇ寫字</button></div>
+  <div class="map-actions"><button class="btn btn-primary" id="quick-start">▶ 開始點心任務</button><button class="btn btn-ghost" id="practice">✎ 練習上次的符號與描寫</button><button class="btn btn-ghost" id="write-all">✏ ㄅㄆㄇ寫字</button><button class="btn btn-ghost" id="cards-all">🃏 抽聲母卡</button></div>
   <div class="unit-map" id="unit-map"></div>
 </main>
 
@@ -98,6 +98,26 @@
   </div>
 </main>
 
+<!-- 抽聲母卡：抽到時只亮符號，點卡片翻面才出聲、看圖 -->
+<main class="wrap cards-wrap" data-screen="cards" hidden>
+  <div class="play-head">
+    <button class="btn btn-ghost" id="cards-back"><span aria-hidden="true">←</span> 回地圖</button>
+    <div class="play-meta">
+      <strong>抽聲母卡</strong>
+      <span id="flash-count">這一輪 0 / 21</span>
+    </div>
+  </div>
+  <div class="flash-desk">
+    <button class="flash-card" id="flash-card" aria-pressed="false">
+      <span class="flash-face flash-front" id="flash-front"></span>
+      <span class="flash-face flash-back" id="flash-back"></span>
+    </button>
+    <p class="flash-hint" id="flash-hint">按「抽一張」開始</p>
+    <button class="btn btn-primary flash-draw" id="flash-draw">🃏 抽一張</button>
+    <div class="flash-trail" id="flash-trail" aria-hidden="true"></div>
+  </div>
+</main>
+
 <!-- 單元結算 -->
 <main class="wrap" data-screen="done" hidden>
   <div class="done card">
@@ -114,8 +134,9 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="../../shared/storage.js?v=1" defer></script>
-<script src="../../shared/audio.js?v=1" defer></script>
+<script src="../../shared/audio.js?v=3" defer></script>
 <script src="../../shared/core.js?v=1" defer></script>
+<script src="../../shared/deal.js?v=1" defer></script>
 <script src="data/symbols.js?v=1" defer></script>
 <script src="data/strokes.js?v=1" defer></script>
 <script src="data/words.js?v=2" defer></script>
@@ -129,6 +150,7 @@
 <script src="modes/trace.js?v=2" defer></script>
 <script src="modes/adventure.js?v=4" defer></script>
 <script src="write.js?v=1" defer></script>
-<script src="zhuyin.js?v=3" defer></script>
+<script src="cards.js?v=3" defer></script>
+<script src="zhuyin.js?v=4" defer></script>
 </body>
 </html>

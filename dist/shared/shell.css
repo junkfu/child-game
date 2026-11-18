@@ -208,6 +208,17 @@ footer {
 .pop { animation: pop .3s ease-out; }
 .shake { animation: shake .34s; }
 
+/* ── 抽牌動畫（shared/deal.js）────────────────────────── */
+/* 飛卡畫在一層固定在視窗上的圖層，飛出畫面也不會撐出捲軸 */
+.deal-layer { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 50; }
+.deal-fly {
+  position: absolute; display: grid; place-items: center; opacity: 0;
+  background: var(--card); border: 4px solid var(--brand-soft); border-radius: var(--radius-lg);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .12); color: var(--brand);
+}
+.deal-q { font-size: 6em; font-weight: 800; color: var(--brand-soft); }
+.dealing { visibility: hidden; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

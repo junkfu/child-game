@@ -43,6 +43,82 @@
     } catch (e) { /* 沒有音訊裝置也不該讓遊戲壞掉 */ }
   }
 
+  /* ── 卡片音效 ───────────────────────────────────────
+     抽卡、翻牌、洗牌用的。一樣即時合成、不用音檔：
+     「刷」的一聲是一小段白噪音過帶通濾波、頻率往上掃；
+     「叮」是兩個短正弦音。時間點對齊 CSS 的發牌動畫（.4s）。 */
+  let noiseBuf = null;
+  function noise() {
+    if (!noiseBuf) {
+      noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.5, ctx.sampleRate);
+      const d = noiseBuf.getChannelData(0);
+      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    }
+    return noiseBuf;
+  }
+  /* 一聲「刷」：at 秒後開始，持續 dur，濾波中心頻率從 f0 掃到 f1 */
+  function swish(at, dur, f0, f1, gain) {
+    const src = ctx.createBufferSource();
+    src.buffer = noise();
+    const bp = ctx.createBiquadFilter();
+    bp.type = 'bandpass'; bp.Q.value = 1.2;
+    const g = ctx.createGain();
+    const t = ctx.currentTime + at;
+    bp.frequency.setValueAtTime(f0, t);
+    bp.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(gain, t + dur * 0.3);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    src.connect(bp); bp.connect(g); g.connect(ctx.destination);
+    src.start(t); src.stop(t + dur + 0.02);
+  }
+  function tone(at, freq, dur, gain, type) {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    const t = ctx.currentTime + at;
+    o.type = type || 'sine';
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(gain, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(t); o.stop(t + dur + 0.02);
+  }
+  const sfxs = {
+    /* 抽一張：刷——叮咚，牌落下時亮一聲 */
+    draw: function () {
+      swish(0, 0.22, 900, 4200, 0.22);
+      tone(0.26, 1047, 0.25, 0.05);
+      tone(0.34, 1568, 0.35, 0.045);
+    },
+    /* 翻牌／偷看：短促的「啪」加一點上揚 */
+    flip: function () {
+      swish(0, 0.12, 2400, 1200, 0.16);
+      tone(0.06, 880, 0.12, 0.035, 'triangle');
+    },
+    /* 蓋回去：比翻開低一點，聽得出是相反的動作 */
+    cover: function () {
+      swish(0, 0.12, 1600, 700, 0.14);
+      tone(0.06, 523, 0.12, 0.03, 'triangle');
+    },
+    /* 洗牌：一串快速的「嗒嗒嗒」，像撥牌 */
+    /* 抽牌動畫期間：約一秒的連續撥牌聲，配 shared/deal.js */
+    riffle: function () {
+      for (let i = 0; i < 16; i++) swish(i * 0.06, 0.05, 2200 + (i % 4) * 500, 1300, 0.13);
+    },
+    shuffle: function () {
+      for (let i = 0; i < 9; i++) swish(i * 0.055, 0.05, 2500 + (i % 3) * 600, 1500, 0.15);
+    },
+  };
+  function sfx(name) {
+    if (!enabled() || !sfxs[name]) return;
+    try {
+      if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
+      ctx.resume();
+      sfxs[name]();
+    } catch (e) { /* 沒有音訊裝置也不該讓遊戲壞掉 */ }
+  }
+
   /* 播一段語音。回傳 Promise，結束或失敗都會 resolve，
      這樣呼叫端可以 .then() 接下一段而不用處理錯誤分支。 */
   function say(src) {
@@ -87,5 +163,5 @@
     } catch (e) {}
   }
 
-  Kid.audio = { chime: chime, say: say, sayAll: sayAll, stop: stop, unlock: unlock, cues: cues };
+  Kid.audio = { chime: chime, sfx: sfx, say: say, sayAll: sayAll, stop: stop, unlock: unlock, cues: cues };
 })(window.Kid = window.Kid || {});

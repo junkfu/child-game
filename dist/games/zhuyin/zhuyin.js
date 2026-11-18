@@ -18,7 +18,7 @@
       b.addEventListener('click', function () {
         Kid.audio.unlock();           /* iOS 只在手勢裡准播聲音，這裡暖機 */
         setProfile(b.dataset.profile);
-        if (wantWrite()) showWrite(); else showMap();
+        route();
       });
     });
   }
@@ -74,6 +74,8 @@
   /* 網址帶 #write 就直接進寫字頁：主選單的「ㄅㄆㄇ寫字」卡片走這條路，
      重新整理也會留在原頁。在頁內切換時只換 hash，不堆歷史紀錄。 */
   function wantWrite() { return location.hash === '#write'; }
+  function wantCards() { return location.hash === '#cards'; }
+  function route() { if (wantWrite()) showWrite(); else if (wantCards()) showCards(); else showMap(); }
   function setHash(h) {
     try { history.replaceState(null, '', location.pathname + location.search + (h ? '#' + h : '')); }
     catch (e) { /* 某些 file:// 環境不給改，沒關係 */ }
@@ -84,6 +86,16 @@
     Kid.$('stage').replaceChildren();
     setHash('write');
     Z.write.show();
+  }
+
+  /* ── 抽聲母卡（#cards）───────────────────────────── */
+  function showCards() {
+    run++;
+    Kid.audio.stop();
+    Kid.$('stage').replaceChildren();
+    Z.write.close();
+    setHash('cards');
+    Z.cards.show(deck);
   }
 
   /* ── 單元進行 ─────────────────────────────────────── */
@@ -170,16 +182,20 @@
   Kid.$('to-map').addEventListener('click', showMap);
   Kid.$('write-all').addEventListener('click', function () { Kid.audio.unlock(); showWrite(); });
   Kid.$('write-back').addEventListener('click', showMap);
+  Kid.$('cards-all').addEventListener('click', function () { Kid.audio.unlock(); showCards(); });
+  Kid.$('cards-back').addEventListener('click', showMap);
   Kid.$('quit').addEventListener('click', function () {
     Kid.audio.stop();
     showMap();
   });
   Kid.$('switch-profile').addEventListener('click', function () {
     setProfile(deck === 'boy' ? 'girl' : 'boy');
-    /* 在寫字頁換版本只是換配色，不用把人踢回地圖 */
-    if (Kid.screens.current() !== 'write') showMap();
+    /* 在寫字頁、抽卡頁換版本只是換配色（和卡片背面的圖），不用把人踢回地圖 */
+    Z.cards.setDeck(deck);
+    const cur = Kid.screens.current();
+    if (cur !== 'write' && cur !== 'cards') showMap();
   });
 
-  if (state.profile) { setProfile(state.profile); if (wantWrite()) showWrite(); else showMap(); }
+  if (state.profile) { setProfile(state.profile); route(); }
   else Kid.screens.show('cover');
 })(window.Kid = window.Kid || {});

@@ -66,5 +66,31 @@
         return { done: Object.keys(written).length, total: 37, unit: '個' };
       },
     },
+    {
+      /* 注音大冒險裡的抽卡頁（#cards），進度一樣存在 zhuyin 那一格 */
+      id: 'zhuyin-cards',
+      store: 'zhuyin',
+      title: '抽聲母卡',
+      sub: '抽一張注音卡，唸唸看，翻過來對答案',
+      icon: '🃏',
+      href: 'games/zhuyin/index.html#cards',
+      tint: '#c4569b',
+      progress: function (s) {
+        const seen = (s && s.cardsSeen) || {};
+        return { done: Object.keys(seen).length, total: 21, unit: '張' };
+      },
+    },
+    {
+      id: 'charades',
+      title: '超級比一比',
+      sub: '抽一張圖偷偷看，比給大家猜',
+      icon: '🎭',
+      href: 'games/charades/index.html',
+      tint: '#e0663f',
+      progress: function (s) {
+        const seen = (s && s.seen) || {};
+        return { done: Object.keys(seen).length, total: 30, unit: '張' };
+      },
+    },
   ];
 })(window.Kid = window.Kid || {});

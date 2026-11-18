@@ -1,0 +1,40 @@
+/* 超級比一比。共用的色票、按鈕、toast 在 shared/shell.css。
+   這一頁用橘紅色，跟找碴（紫）、注音（粉／藍）、迷宮（青綠）分開。 */
+:root {
+  --brand: #e0663f; --brand-soft: #f0916f; --accent: #f2b544;
+  --paper: #fff7f2; --line: #f5ddd0; --shadow: #efd2c3;
+}
+
+.charades { display: flex; flex-direction: column; align-items: center; gap: 16px; padding-top: 12px; }
+.charades-left { color: var(--ink-faint); font-size: 14px; }
+
+/* 卡片尺寸跟著視窗高度走，直放、橫放平板都讓「抽一張」留在一屏內 */
+.card-btn {
+  width: min(80vw, 44vh, 380px); aspect-ratio: 3 / 4; padding: 0; cursor: pointer;
+  display: grid; place-items: center;
+  background: var(--card); border: 4px solid var(--line); border-radius: var(--radius-lg);
+  box-shadow: 0 8px 0 var(--shadow); transition: background .2s, border-color .2s;
+}
+.card-btn:active { transform: translateY(3px); box-shadow: 0 5px 0 var(--shadow); }
+.card-btn.covered {
+  border-color: var(--brand-soft);
+  background: repeating-linear-gradient(45deg, var(--brand) 0 18px, var(--brand-soft) 18px 36px);
+}
+.card-btn.covered .card-word { color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, .2); }
+.card-face { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.card-emoji { font-size: min(44vw, 22vh, 200px); line-height: 1; }
+.card-word { font-size: clamp(26px, 5vh, 40px); letter-spacing: .1em; color: var(--ink); }
+.card-btn.deal { animation: deal .4s ease-out; }
+@keyframes deal {
+  from { transform: translateY(-30px) rotate(-8deg) scale(.85); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+/* 飛卡用和蓋著的卡片同一款條紋背面 */
+.charades-fly {
+  border-color: var(--brand-soft);
+  background: repeating-linear-gradient(45deg, var(--brand) 0 18px, var(--brand-soft) 18px 36px);
+}
+.charades-fly .deal-q { color: #fff; }
+.charades-hint { color: var(--ink-soft); font-size: 17px; min-height: 1.5em; text-align: center; }
+.draw-btn { min-height: var(--tap-lg); padding-inline: 44px; font-size: 24px; }
+@media (prefers-reduced-motion: reduce) { .card-btn.deal { animation: none; } }
