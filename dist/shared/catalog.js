@@ -24,6 +24,20 @@
       },
     },
     {
+      /* 找碴第二季，畫面是 SVG；遊戲程式和第一季共用 spot.js，進度另存一格 */
+      id: 'spot-monster',
+      title: '口袋怪獸找碴',
+      sub: '小怪獸身上藏著小秘密，找出 10 個不同',
+      icon: '👾',
+      href: 'games/spot/monster.html',
+      tint: '#5a9e3a',
+      progress: function (s) {
+        const found = Array.isArray(s.found) ? s.found : [];
+        const done = found.filter(function (f) { return Array.isArray(f) && f.length >= 10; }).length;
+        return { done: done, total: 10, unit: '關' };
+      },
+    },
+    {
       id: 'zhuyin',
       title: '注音大冒險',
       sub: '餵注音餅乾、找寶石，收集 10 位小怪獸',

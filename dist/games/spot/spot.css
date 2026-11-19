@@ -156,3 +156,17 @@
   .game-actions { width: 100%; }
   .game-actions .btn { flex: 1; }
 }
+
+/* ── 季別切換 ───────────────────────────────────────── */
+.season-link { margin-left: auto; }
+@media (max-width: 720px) { .season-link { margin-left: 0; } }
+
+/* ── 口袋怪獸篇：畫面是 SVG，不用圖集 ───────────────── */
+/* 綠色系，和閃亮派對篇（紫）分開，一看就知道是哪一季 */
+.svg-pack {
+  --brand: #5a9e3a; --brand-soft: #8cc56b; --accent: #f0a640;
+  --paper: #f1f9ec; --line: #dcebd2; --shadow: #d2e4c6;
+}
+.svg-pack .scene { background: #dff1d6; }
+.svg-pack .scene-art { background: none; }
+.scene-art svg { display: block; width: 100%; height: 100%; }

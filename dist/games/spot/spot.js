@@ -10,14 +10,19 @@
        .object{color:transparent;font-size:0} 把它們藏起來了，是死資料。
        但 .objects 那層透明按鈕要留著：它們是鍵盤與讀螢幕的操作路徑
        （滑鼠走的是座標命中判定，鍵盤走的是這些按鈕）。
-     - 命中判定仍然是百分比座標，所以版面縮放不影響答案位置。 */
+     - 命中判定仍然是百分比座標，所以版面縮放不影響答案位置。
+
+   題組包（Kid.spotPack）：monster.html 會先載入另一組關卡（口袋怪獸篇），
+   這裡就改用它的關卡、答案範圍、SVG 畫面與文案，進度存在另一格。
+   沒有 pack 時就是原本的閃亮派對篇，行為完全不變。 */
 (function (Kid) {
   'use strict';
 
-  const GAME_ID = 'spot';
+  const pack = Kid.spotPack || null;
+  const GAME_ID = pack ? pack.id : 'spot';
 
   /* [關卡名稱, 副標, 圖示] */
-  const levels = [
+  const levels = pack ? pack.levels : [
     ['閃亮出道舞台', '屋頂上的小派對', '🎤'],
     ['甜甜點心時光', '今天吃一口幸福', '🧁'],
     ['女團練習日', '跟著音樂動一動', '🎧'],
@@ -31,16 +36,22 @@
 
   /* 每關的差異範圍，格式 [中心x%, 中心y%, 水平半徑%, 垂直半徑%]。
      畫面變化、點擊判定、提示圈圈共用同一份資料。 */
-  const regions = Kid.spotDifferences;
+  const regions = pack ? pack.regions : Kid.spotDifferences;
 
   const $ = Kid.$;
-  const praises = [
-    '好眼力！找到一個小不同！',
-    '哇，你的眼睛會發光耶！',
-    '女孩們為你拍拍手！',
-    '又收集到一顆小星星！',
-    '小小觀察家，就是你！',
-  ];
+  const copy = Object.assign({
+    start: '看看衣服、髮飾和背景，小不同藏在畫裡喔！',
+    miss: '這裡一樣喔，再仔細看看衣服和背景 ♡',
+    done: '全部找到了！你是閃亮觀察家！',
+    praises: [
+      '好眼力！找到一個小不同！',
+      '哇，你的眼睛會發光耶！',
+      '女孩們為你拍拍手！',
+      '又收集到一顆小星星！',
+      '小小觀察家，就是你！',
+    ],
+  }, pack && pack.copy);
+  const praises = copy.praises;
 
   function diffCount(level) { return regions[level].length; }
   function puzzle(level) {
@@ -55,8 +66,9 @@
 
   /* ── 狀態 ─────────────────────────────────────────── */
   const saved = Kid.store.game(GAME_ID);
-  const edition = 'variety-2';
-  const previousEdition = saved.edition === edition ? saved.previousEdition
+  const edition = pack ? pack.edition : 'variety-2';
+  /* 題組包第一次玩時沒有舊紀錄可封存 */
+  const previousEdition = saved.edition === edition || (pack && !saved.edition) ? saved.previousEdition
     : { edition: saved.edition || 'original', current: saved.current, found: saved.found };
   const activeFound = saved.edition === edition ? saved.found : [];
   let current = Number.isInteger(saved.current) && saved.current >= 0 && saved.current < levels.length
@@ -104,6 +116,8 @@
 
     ['a', 'b'].forEach(function (side) {
       const scene = $('scene-' + side);
+      /* 題組包的畫面是整張 SVG，A、B 各畫一張，不用圖集和遮罩 */
+      if (pack) scene.querySelector('.scene-art').innerHTML = pack.svg(current, side);
       scene.style.setProperty('--bg-x', current % 2 ? '100%' : '0%');
       scene.style.setProperty('--bg-y', Math.floor(current / 2) * 25 + '%');
       /* 只有 B 面疊上編修圖的局部遮罩，遮罩外仍是原圖，
@@ -117,7 +131,7 @@
           ' aria-label="圖片' + side.toUpperCase() + '，觀察區域' + (i + 1) + (got ? '，已找到' : '') + '"' +
           (got ? ' disabled' : '') + '></button>';
       }).join('');
-      scene.querySelector('.changes').innerHTML = side === 'b'
+      scene.querySelector('.changes').innerHTML = side === 'b' && !pack
         ? puzzle(current).map(function (item) {
             return '<div class="scene-change' + (item.kind === 'color' ? '' : ' varied') + '" style="--x:' + item.x + '%;--y:' + item.y +
               '%;--rx:' + item.rx + '%;--ry:' + item.ry + '%"></div>';
@@ -141,8 +155,8 @@
     $('journey-count').textContent = '已完成 ' + completedCount() + ' / ' + levels.length + ' 關';
     $('hint').disabled = n === total;
     $('encouragement').textContent =
-      n === total ? '全部找到了！你是閃亮觀察家！'
-      : n === 0 ? '看看衣服、髮飾和背景，小不同藏在畫裡喔！'
+      n === total ? copy.done
+      : n === 0 ? copy.start
       : (total - n) <= 3 ? '再找到 ' + (total - n) + ' 個，就集滿星星囉！'
       : praises[n % praises.length];
   }
@@ -158,7 +172,7 @@
 
   function miss(x, y) {
     Kid.audio.chime('wrong');
-    Kid.toast('這裡一樣喔，再仔細看看衣服和背景 ♡');
+    Kid.toast(copy.miss);
     clearTimeout(missTimer);
     document.querySelectorAll('.miss-mark').forEach(function (el) { el.remove(); });
     ['a', 'b'].forEach(function (side) {

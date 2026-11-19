@@ -4,8 +4,8 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const path = require('node:path');
 const root = path.resolve(__dirname, '../dist/games/spot');
-function boot(saved = {}) {
-  const nodes = new Map(), registered = new Map(); let result;
+function boot(saved = {}, files = ['differences.js','spot.js']) {
+  const nodes = new Map(), registered = new Map(); let result, savedId;
   const node = () => ({textContent:'', innerHTML:'', open:false, children:[], handlers:{},
     style:{setProperty(){}}, classList:{add(){}},
     addEventListener(name, fn){this.handlers[name]=fn;},
@@ -13,11 +13,11 @@ function boot(saved = {}) {
     getBoundingClientRect(){return {left:100,top:200,width:450,height:300};}, close(){this.open=false;}, showModal(){this.open=true;}
   });
   const get = id => {if (!nodes.has(id)) nodes.set(id,node());return nodes.get(id);};
-  const Kid = {$:get, store:{game:()=>saved,saveGame:(id,value)=>{result=value;}},
+  const Kid = {$:get, store:{game:()=>saved,saveGame:(id,value)=>{savedId=id;result=value;}},
     audio:{chime(){}},stars(){},toast(){},wireSoundButton(){}};
   const context = vm.createContext({window:{Kid}, document:{createElement:node,querySelectorAll:()=>[],modelContext:{registerTool(t){registered.set(t.name,t);}}},setTimeout:()=>1,clearTimeout(){}});
-  ['differences.js','spot.js'].forEach(f=>vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),context));
-  return {Kid,get,registered,snapshot:()=>JSON.parse(JSON.stringify(result))};
+  files.forEach(f=>vm.runInContext(fs.readFileSync(path.join(root,f),'utf8'),context));
+  return {Kid,get,registered,savedId:()=>savedId,snapshot:()=>JSON.parse(JSON.stringify(result))};
 }
 
 test('十關皆有十個不同位置，至少六個非顏色變化', () => {
@@ -44,6 +44,40 @@ test('舊答案索引封存，新版另記進度，重新載入仍保留新舊�
 test('實際 click handler：100 個答案中心可命中，重複點擊不重複計分', () => {
   const {Kid,get,registered,snapshot}=boot();
   Kid.spotDifferences.forEach((rows,level)=>{
+    registered.get('spot_choose_level').execute({level:level+1});
+    rows.forEach(([x,y],index)=>{
+      const scene=get(index%2?'scene-a':'scene-b');
+      const e={detail:1,target:{closest:()=>null},currentTarget:scene,clientX:100+450*x/100,clientY:200+300*y/100};
+      scene.handlers.click(e);
+      assert.equal(Number(get('found-count').textContent),index+1);
+      scene.handlers.click(e);
+      assert.equal(Number(get('found-count').textContent),index+1);
+    });
+    assert.equal(snapshot().found[level].length,10);
+  });
+});
+
+const MONSTER = ['monster-art.js','monster-scenes.js','spot.js'];
+
+test('口袋怪獸篇：十關各十個不同，至少六個非顏色變化，A、B 兩張圖不一樣', () => {
+  const {Kid} = boot({}, MONSTER); const pack = Kid.spotPack;
+  assert.equal(pack.levels.length,10); assert.equal(pack.regions.length,10);
+  pack.regions.forEach((rows, level) => {
+    assert.equal(rows.length,10);
+    assert.ok(rows.filter(r=>r[5]!=='color').length>=6);
+    assert.ok(new Set(rows.map(r=>r[5])).size>=3);
+    assert.equal(new Set(rows.map(r=>r[0]+','+r[1])).size,10);
+    rows.forEach(([x,y,rx,ry,label])=>{assert.ok(x>=0&&x<=100&&y>=0&&y<=100);assert.ok(rx>0&&ry>0&&label);});
+    const a = pack.svg(level,'a'), b = pack.svg(level,'b');
+    assert.match(a, /^<svg /); assert.notEqual(a, b);
+  });
+});
+
+test('口袋怪獸篇：進度存在自己那一格，100 個答案中心都點得到', () => {
+  const {Kid,get,registered,snapshot,savedId}=boot({}, MONSTER);
+  assert.equal(savedId(),'spot-monster');
+  assert.equal(snapshot().previousEdition, undefined);
+  Kid.spotPack.regions.forEach((rows,level)=>{
     registered.get('spot_choose_level').execute({level:level+1});
     rows.forEach(([x,y],index)=>{
       const scene=get(index%2?'scene-a':'scene-b');
