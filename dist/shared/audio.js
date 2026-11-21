@@ -147,7 +147,30 @@
     }, Promise.resolve());
   }
 
+  /* 用瀏覽器內建的語音合成唸一段字，給沒有錄音檔的內容用（例如比一比的 500 個詞）。
+     優先挑台灣中文的聲音；iPad、Mac 內建「美佳」，Android、Chrome 也有中文聲音，離線也能唸。 */
+  const synth = window.speechSynthesis || null;
+  function zhVoice() {
+    const vs = synth.getVoices();
+    const norm = function (v) { return v.lang.replace('_', '-').toLowerCase(); };
+    return vs.find(function (v) { return norm(v) === 'zh-tw'; }) ||
+      vs.find(function (v) { return /^zh-(hant|hk)/.test(norm(v)); }) ||
+      vs.find(function (v) { return /^(zh|cmn)/.test(norm(v)); }) || null;
+  }
+  function speak(text) {
+    if (!enabled() || !synth) return false;
+    stop();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'zh-TW';
+    const v = zhVoice();
+    if (v) u.voice = v;
+    u.rate = 0.85;   /* 放慢一點，小朋友聽得清楚 */
+    synth.speak(u);
+    return true;
+  }
+
   function stop() {
+    if (synth) synth.cancel();
     if (current) {
       try { current.pause(); current.currentTime = 0; } catch (e) {}
       current = null;
@@ -163,5 +186,5 @@
     } catch (e) {}
   }
 
-  Kid.audio = { chime: chime, sfx: sfx, say: say, sayAll: sayAll, stop: stop, unlock: unlock, cues: cues };
+  Kid.audio = { chime: chime, sfx: sfx, say: say, sayAll: sayAll, speak: speak, canSpeak: !!synth, stop: stop, unlock: unlock, cues: cues };
 })(window.Kid = window.Kid || {});

@@ -20,6 +20,7 @@
   const face = Kid.$('card-face');
   const hint = Kid.$('hint');
   const left = Kid.$('left');
+  const speakBtn = Kid.$('speak');
 
   /* 抽一張：先跑一秒「很多張跳來跳去」的動畫，再落下一張蓋著的卡。
      飛卡一律畫背面 —— 這一頁的卡片要保密，不能在動畫裡閃過答案。 */
@@ -27,6 +28,7 @@
     if (dealing) return;
     dealing = true;
     Kid.audio.unlock();
+    Kid.audio.stop();
     if (!bag.length) {
       if (current) Kid.toast(C.ITEMS.length + ' 張都抽過了，重新洗牌！');
       bag = C.newBag(current);
@@ -54,6 +56,7 @@
     if (!current) return draw();
     Kid.audio.unlock();
     shown = !shown;
+    if (!shown) Kid.audio.stop();
     Kid.audio.sfx(shown ? 'flip' : 'cover');
     render(false);
   }
@@ -76,6 +79,8 @@
       card.setAttribute('aria-label', it.word + '。點一下蓋起來');
       hint.textContent = '記住了嗎？點一下蓋起來，開始比！';
     }
+    /* 小朋友不識字：偷看時多一顆「唸給我聽」。只在翻開時出現，蓋著時不會不小心唸出答案。 */
+    speakBtn.hidden = !(shown && Kid.audio.canSpeak);
     card.classList.toggle('covered', !!current && !shown);
     card.setAttribute('aria-pressed', String(shown));
     left.textContent = current ? '還有 ' + bag.length + ' 張沒抽' : '共 ' + C.ITEMS.length + ' 張';
@@ -89,5 +94,9 @@
   Kid.wireSoundButton(Kid.$('sound'));
   card.addEventListener('click', peek);
   Kid.$('draw').addEventListener('click', draw);
+  speakBtn.addEventListener('click', function () {
+    if (!current || !shown) return;
+    if (!Kid.audio.speak(C.item(current).word)) Kid.toast('聲音關著喔，按右上角 ♫ 打開');
+  });
   render(false);
 })(window.Kid = window.Kid || {});

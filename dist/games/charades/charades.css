@@ -38,3 +38,7 @@
 .charades-hint { color: var(--ink-soft); font-size: 17px; min-height: 1.5em; text-align: center; }
 .draw-btn { min-height: var(--tap-lg); padding-inline: 44px; font-size: 24px; }
 @media (prefers-reduced-motion: reduce) { .card-btn.deal { animation: none; } }
+
+/* 唸給我聽：只在翻開卡片時出現 */
+.speak-btn { min-height: var(--tap); font-size: 20px; padding-inline: 28px; }
+.speak-btn[hidden] { display: none; }

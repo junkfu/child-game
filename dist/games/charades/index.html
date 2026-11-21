@@ -8,7 +8,7 @@
 <title>超級比一比</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23e0663f'/%3E%3Ctext x='32' y='45' font-size='34' text-anchor='middle'%3E%F0%9F%8E%AD%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="../../shared/shell.css?v=2">
-<link rel="stylesheet" href="charades.css?v=2">
+<link rel="stylesheet" href="charades.css?v=3">
 </head>
 <body>
 
@@ -25,6 +25,7 @@
 <main class="wrap charades">
   <p class="charades-left" id="left">共 500 張</p>
   <button class="card-btn" id="card" aria-pressed="false"><span class="card-face" id="card-face"></span></button>
+  <button class="btn btn-ghost speak-btn" id="speak" hidden>🔊 唸給我聽</button>
   <p class="charades-hint" id="hint" aria-live="polite"></p>
   <button class="btn btn-primary draw-btn" id="draw">🎲 抽一張</button>
 </main>
@@ -32,10 +33,10 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="../../shared/storage.js?v=1" defer></script>
-<script src="../../shared/audio.js?v=3" defer></script>
+<script src="../../shared/audio.js?v=4" defer></script>
 <script src="../../shared/core.js?v=1" defer></script>
 <script src="../../shared/deal.js?v=1" defer></script>
 <script src="charades-core.js?v=3" defer></script>
-<script src="charades.js?v=3" defer></script>
+<script src="charades.js?v=4" defer></script>
 </body>
 </html>
